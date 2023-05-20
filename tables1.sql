@@ -19,11 +19,11 @@ engine = InnoDB;
 create table if not exists Books (
 	ISBN varchar(30) not null,
 	Title varchar(30),
-	#Summary clob,
+	Summary longtext,
 	No_pages integer,
-	#Image blob not null,
+	Image blob not null,
 	Book_language varchar(30),
-	#Key_words clob,
+	Key_words text,
 	primary key(ISBN)
 )
 engine = InnoDB;
@@ -109,7 +109,7 @@ create table if not exists Book_Subject(
 engine = InnoDB;
 create table if not exists Reviews (
 	Serial_Number Integer not null,
-	#Text clob not null,
+	Review longtext not null,
 	Username Varchar(30) not null,
 	Post_Date timestamp,
 	Last_Update timestamp,
@@ -153,3 +153,4 @@ create table if not exists Booking (
 	          references Books(ISBN)
 )
 engine = InnoDB;
+
