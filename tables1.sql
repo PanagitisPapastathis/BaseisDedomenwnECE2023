@@ -1,7 +1,7 @@
 ##                Authors: PanagitisPapastathis, el20056, Klarinetos                ##
 ##                                    20/5/2023                                     ##
 
-#                         First attemt at creating the tables                        #
+#                         First attempt at creating the tables                       #
 
 
 create table if not exists School (
