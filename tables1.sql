@@ -71,7 +71,7 @@ create table if not exists Users (
 	primary key(Username)
 	constraint fk_school_name
 		foreign key(School_Name)
-		refferences School(Name)
+		references School(Name)
 )
 engine = InnoDB;
 create table if not exists Author(
@@ -135,7 +135,7 @@ create table if not exists Lending (
 	primary key(Serial_number),
 	constraint fk_Lending_User
 	          foreign key (Username)
-	          references User (Username),
+	          references Users (Username),
 	constraint fk_Lending_ISBN
 	          foreign key (ISBN)
 	          references Books(ISBN)
@@ -150,7 +150,7 @@ create table if not exists Booking (
 	primary key(Serial_number),
 	constraint fk_Booking_User
 	          foreign key (Username)
-	          references User (Username),
+	          references Users (Username),
 	constraint fk_Booking_ISBN
 	          foreign key (ISBN)
 	          references Books(ISBN)
