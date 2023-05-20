@@ -69,6 +69,9 @@ create table if not exists Users (
 	School_Name Varchar(30) not null,
 	Registration_Date timestamp,
 	primary key(Username)
+	constraint fk_school_name
+		foreign key(School_Name)
+		refferences School(Name)
 )
 engine = InnoDB;
 create table if not exists Author(
