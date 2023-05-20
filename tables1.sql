@@ -68,7 +68,7 @@ create table if not exists Users (
 	Books_Owed Integer,
 	School_Name Varchar(30) not null,
 	Registration_Date timestamp,
-	primary key(Username)
+	primary key(Username),
 	constraint fk_school_name
 		foreign key(School_Name)
 		references School(Name)
