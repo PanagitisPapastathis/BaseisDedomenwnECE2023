@@ -1,0 +1,13 @@
+drop table if exists Reviews;
+drop table if exists Lending;
+drop table if exists Booking;
+drop table if exists Book_Author;
+drop table if exists Book_Subject;
+drop table if exists Subject;
+drop table if exists Users;
+drop table if exists Author;
+drop table if exists Book_Publisher;
+drop table if exists Publisher;
+drop table if exists Copies;
+drop table if exists Books;
+drop table if exists School;
