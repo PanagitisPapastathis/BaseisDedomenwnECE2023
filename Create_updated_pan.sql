@@ -131,8 +131,8 @@ create table if not exists Reviews (
 	Review longtext not null,
 	Username Varchar(30) not null,
 	Post_Date timestamp,
-	Last_Update date, #για καποιο λόγο το βγάζει με θέμα
-	ISBN Varchar(30),
+	Last_Update timestamp, #emena den mou vgazei thema alla to allazw giati san timestamp vgazei pio poly nohma - swthrhs
+	ISBN Varchar(30),θέμα
 	Title Varchar(30),
 	primary key(Serial_number),
 	constraint fk_Username_rev
