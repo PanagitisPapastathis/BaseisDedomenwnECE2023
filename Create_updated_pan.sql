@@ -168,6 +168,30 @@ create table if not exists Lending (
 		  on update cascade
 )
 engine = InnoDB;
+
+DELIMITER //
+
+CREATE trigger if not exists trg_LendingInsert
+	BEFORE INSERT ON Lending
+	FOR EACH ROW
+BEGIN
+	DECLARE lending_count INT;
+
+	SET lending_count = (
+		SELECT COUNT(*)
+		FROM Lending
+		WHERE Username = NEW.Username
+		AND Working_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+	);
+
+	IF lending_count >= 2 THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'Maximum number of lendings reached for this user in one week.';
+	END IF;
+END //
+
+DELIMITER ;
+
 create table if not exists Booking (
 	Serial_number int not null,
 	Making_date timestamp not null default CURRENT_DATE,
