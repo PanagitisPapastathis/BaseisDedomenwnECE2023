@@ -145,6 +145,7 @@ create table if not exists Reviews (
 	Post_Date timestamp,
 	Last_Update timestamp, #gamw to spitaki mou
 	ISBN Varchar(30),
+	Status ENUM ('Pending', 'Accepted', 'Deleted', 'Removed'),
 	Title Varchar(30),
 	primary key(Serial_number),
 	constraint fk_Username_rev
@@ -314,3 +315,17 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_delete_review
+AFTER UPDATE ON Reviews
+FOR EACH ROW
+BEGIN
+    IF NEW.Status = 'Deleted' OR NEW.Status = 'Removed' THEN
+        DELETE FROM Reviews WHERE Serial_number = NEW.Serial_number;
+    END IF;
+END//
+
+DELIMITER ;
+
