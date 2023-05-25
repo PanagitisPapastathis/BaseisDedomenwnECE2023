@@ -1,3 +1,6 @@
+create database if not exists sakila;
+use sakila;
+
 create table if not exists School (
 	Name varchar(30) not null,
 	Address varchar(30) not null,
@@ -25,7 +28,7 @@ engine = InnoDB;
 
 create table if not exists Copies(
 	ISBN varchar(30) not null,
-	Status enum('Free', 'Lended', 'Booked'),
+	Status enum('Available', 'Lended', 'Booked'), -- free -> available ~ swthrhs 25/5
 	No_of_copies int not null,
 	Available_copies int not null,
 	primary key (ISBN),
@@ -131,7 +134,7 @@ create table if not exists Reviews (
 	Review longtext not null,
 	Username Varchar(30) not null,
 	Post_Date timestamp,
-	Last_Update date, #για καποιο λόγο το βγάζει με θέμα
+	Last_Update timestamp, -- για καποιο λόγο το βγάζει με θέμα -> to kanoume timestam ~ swthrhs 25/5
 	ISBN Varchar(30),
 	Title Varchar(30),
 	primary key(Serial_number),
@@ -148,30 +151,56 @@ create table if not exists Reviews (
 )
 engine = InnoDB;
 
-create table if not exists Lending (
-	Serial_number int not null,
-	Working_date timestamp not null default CURRENT_DATE,
-	Expiration_date timestamp not null default CURRENT_DATE,
-	Username Varchar(30) not null,
-	Return_status Varchar(30) not null,
-	ISBN Varchar(30) not null,
-	primary key(Serial_number),
-	constraint fk_Lending_User
-	      foreign key (Username)
-	      references Users (Username)
-	      on delete restrict
-		  on update cascade,
-	constraint fk_Lending_ISBN
-	      foreign key (ISBN)
-	      references Books(ISBN)
-	      on delete restrict
-		  on update cascade
-)
+CREATE TABLE IF NOT EXISTS Lending (
+	Serial_number INT NOT NULL,
+	Working_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+	Expiration_date TIMESTAMP NOT NULL DEFAULT (CURRENT_DATE + INTERVAL 7 DAY),
+	Username VARCHAR(30) NOT NULL,
+	Return_status VARCHAR(30) NOT NULL,
+	ISBN VARCHAR(30) NOT NULL,
+	PRIMARY KEY (Serial_number),
+	CONSTRAINT fk_Lending_User
+		FOREIGN KEY (Username)
+		REFERENCES Users (Username)
+		ON DELETE RESTRICT
+		ON UPDATE CASCADE,
+	CONSTRAINT fk_Lending_ISBN
+		FOREIGN KEY (ISBN)
+		REFERENCES Books (ISBN)
+		ON DELETE RESTRICT
+		ON UPDATE CASCADE
+);
+
+DELIMITER //
+
+CREATE TRIGGER trg_LendingInsert
+	BEFORE INSERT ON Lending
+	FOR EACH ROW
+BEGIN
+	DECLARE lending_count INT;
+
+	SET lending_count = (
+		SELECT COUNT(*)
+		FROM Lending
+		WHERE Username = NEW.Username
+		AND Working_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+	);
+
+	IF lending_count >= 2 THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'Maximum number of lendings reached for this user in one week.';
+	ELSE
+		SET NEW.WeeklyLendingCount = lending_count + 1;
+	END IF;
+END //
+
+DELIMITER ;
+
 engine = InnoDB;
 create table if not exists Booking (
 	Serial_number int not null,
 	Making_date timestamp not null default CURRENT_DATE,
-	Expiration_date timestamp not null default CURRENT_DATE,
+	Expiration_date timestamp not null default CURRENT_DATE + INTERVAL 7 DAY, -- TO ALLAKSA ~ swthrhs 25/5
 	Username Varchar(30) not null,
 	ISBN Varchar(30) not null,
 	primary key(Serial_number),
