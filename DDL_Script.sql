@@ -209,22 +209,6 @@ END //
 
 DELIMITER ;
 
-DELIMITER ;
-
-DELIMITER //
-CREATE TRIGGER IF NOT EXISTS trg_Overdue_Lending_Lending
-BEFORE INSERT ON Lending
-FOR EACH ROW
-BEGIN
-  IF (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username
-    AND Making_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)) > 0 THEN
-    SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'User has an overdue lending.';
-  END IF;
-END //
-
-DELIMITER ;
-
 create table if not exists Booking (
 	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Making_date date not null default CURRENT_DATE,
@@ -246,7 +230,23 @@ create table if not exists Booking (
 engine = InnoDB;
 
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS trg_Overdue_Lending_Booking
+
+CREATE TRIGGER IF NOT EXISTS trg_Lending_With_Overdue_Lending
+BEFORE INSERT ON Lending
+FOR EACH ROW
+BEGIN
+  IF (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username
+    AND Making_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)) > 0 THEN
+    SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'User has an overdue lending.';
+  END IF;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_Booking_With_οverdue_Lending
 BEFORE INSERT ON Booking
 FOR EACH ROW
 BEGIN
@@ -328,4 +328,3 @@ BEGIN
 END//
 
 DELIMITER ;
-
