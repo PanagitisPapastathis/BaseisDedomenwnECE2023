@@ -78,7 +78,7 @@ create table if not exists Users (
 	Password Varchar(30) not null,
 	First_Name Varchar(30) not null,
 	Last_Name Varchar(30) not null,
-	Status Enum ('Student', 'Personnel', 'Admin', 'Central Admin', 'Suspended') not null,
+	Status Enum ('Student', 'Personnel', 'Admin', 'Central Admin', 'Suspended', 'Banned') not null,
 	Phone_number Integer not null,
 	Email Varchar(30) not null,
 	Books_Lended Integer not null default 0,
@@ -386,3 +386,17 @@ END//
 DELIMITER ;
 
 DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_User_suspended_or_banned
+BEFORE UPDATE ON Users
+FOR EACH ROW
+BEGIN
+	IF NEW.Status = 'Suspended' THEN
+		UPDATE Reviews SET Status = 'Pending' WHERE Username = OLD.Username;
+	END IF;
+	IF NEW.Status = 'Banned' THEN
+		DELETE FROM Reviews WHERE Username = OLD.Username;
+	END IF;
+END//
+
+DELIMITER ;
