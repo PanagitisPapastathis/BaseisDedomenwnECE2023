@@ -78,7 +78,7 @@ create table if not exists Users (
 	Password Varchar(30) not null,
 	First_Name Varchar(30) not null,
 	Last_Name Varchar(30) not null,
-	Status Varchar(30) not null,
+	Status Enum ('Student', 'Personnel', 'Admin', 'Central Admin') not null,
 	Phone_number Integer not null,
 	Email Varchar(30) not null,
 	Books_Lended Integer not null default 0,
@@ -318,13 +318,61 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER IF NOT EXISTS trg_delete_review
-AFTER UPDATE ON Reviews
+CREATE TRIGGER IF NOT EXISTS trg_user_status_updates
+BEFORE UPDATE ON Users
 FOR EACH ROW
 BEGIN
-    IF NEW.Status = 'Deleted' OR NEW.Status = 'Removed' THEN
-        DELETE FROM Reviews WHERE Serial_number = NEW.Serial_number;
+  IF OLD.Status = 'Administrator' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE School_Name = OLD.School_Name AND Status = 'Administrator') = 1 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Error on update: School has no other administrators';
     END IF;
+  END IF;
+  
+  IF OLD.Status = 'Central Administrator' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE Status = 'Central Administrator') = 1 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Error on update: No other central administrators';
+    END IF;
+  END IF;
+  
+  IF NOT OLD.Status = 'Student' AND NEW.Status = 'Student' THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Error on update: Cannot change status to student';
+  END IF;
 END//
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_user_deletions
+BEFORE DELETE ON Users
+FOR EACH ROW
+BEGIN
+  IF OLD.Status = 'Administrator' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE School_Name = OLD.School_Name AND Status = 'Administrator') = 1 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Error on delete: School has no other administrators';
+    END IF;
+  END IF;
+  
+  IF OLD.Status = 'Central Administrator' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE Status = 'Central Administrator') = 1 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Error on delete: No other central administrators';
+    END IF;
+  END IF;
+END//
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
