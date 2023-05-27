@@ -78,13 +78,14 @@ create table if not exists Users (
 	Password Varchar(30) not null,
 	First_Name Varchar(30) not null,
 	Last_Name Varchar(30) not null,
-	Status Enum ('Student', 'Personnel', 'Admin', 'Central Admin') not null,
+	Status Enum ('Student', 'Personnel', 'Admin', 'Central Admin', 'Suspended') not null,
 	Phone_number Integer not null,
 	Email Varchar(30) not null,
 	Books_Lended Integer not null default 0,
 	Books_Owed Integer not null default 0,
 	School_Name Varchar(30) not null,
-	Registration_Date timestamp,
+	Registration_Date timestamp default CURRENT_TIMESTAMP,
+	Last_Update timestamp default CURRENT_TIMESTAMP,
 	primary key(Username)
 )
 engine = InnoDB;
@@ -163,9 +164,9 @@ engine = InnoDB;
 
 create table if not exists Lending (
 	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
-	Making_date timestamp not null default CURRENT_DATE,
+	Making_date date not null default CURRENT_DATE, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! timestamp -> date
 	Username Varchar(30) not null,
-	Return_status Varchar(30) not null,
+	Return_status ENUM('Owed', 'Returned') default 'Owed',
 	ISBN Varchar(30) not null,
 	primary key(Serial_number),
 	constraint fk_Lending_User
@@ -183,7 +184,7 @@ engine = InnoDB;
 
 DELIMITER //
 
-CREATE trigger if not exists trg_LendingInsert
+CREATE TRIGGER if not exists trg_Lending_Insert
 	BEFORE INSERT ON Lending
 	FOR EACH ROW
 BEGIN
@@ -246,7 +247,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER IF NOT EXISTS trg_Booking_With_οverdue_Lending
+CREATE TRIGGER IF NOT EXISTS trg_Booking_With_Overdue_Lending
 BEFORE INSERT ON Booking
 FOR EACH ROW
 BEGIN
@@ -318,7 +319,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER IF NOT EXISTS trg_user_status_updates
+CREATE TRIGGER IF NOT EXISTS trg_Users_Status_Updates
 BEFORE UPDATE ON Users
 FOR EACH ROW
 BEGIN
@@ -346,7 +347,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER IF NOT EXISTS trg_user_deletions
+CREATE TRIGGER IF NOT EXISTS trg_User_Deletions
 BEFORE DELETE ON Users
 FOR EACH ROW
 BEGIN
@@ -367,12 +368,21 @@ END//
 
 DELIMITER ;
 
+DELIMITER //
 
+CREATE TRIGGER IF NOT EXISTS trg_Last_Update_Reviews
+BEFORE UPDATE ON Reviews
+FOR EACH ROW
+BEGIN
+	IF NOT OLD.Review = NEW.Review THEN
+		SET NEW.Last_Update = CURRENT_TIMESTAMP;
+		IF (SELECT Status FROM Users WHERE Username = NEW.Username) = 'Student' THEN
+			SET NEW.Status = 'Pending';
+		END IF;
+		SET NEW.Last_Update = CURRENT_TIMESTAMP;
+	END IF;
+END//
 
+DELIMITER ;
 
-
-
-
-
-
-
+DELIMITER //
