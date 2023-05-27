@@ -1,22 +1,22 @@
 create table if not exists School (
-	Name varchar(30) not null,
+	Name varchar(50) not null,
 	Address varchar(30) not null,
 	Postal_code int not null,
 	City varchar(30) not null,
-	Phone_number int not null,
+	Phone_number varchar(50) not null,
 	Email varchar(30) not null,
-	Headmaster_name varchar(30) not null,
-	School_admin_name varchar(30) not null,
+	Headmaster_name varchar(40) not null,
+	School_admin_name varchar(40) not null,
 	primary key (Name)
 )
 engine = InnoDB;
 
 create table if not exists Books (
 	ISBN varchar(30) not null,
-	Title varchar(30) not null,
+	Title varchar(50) not null,
 	Summary text not null,
 	No_pages integer not null,
-	Image BLOB not null not null,
+	Image text not null ,
 	Book_language varchar(30) not null,
 	Key_words text not null,
 	primary key(ISBN)
@@ -37,16 +37,16 @@ create table if not exists Copies(
 )
 engine = InnoDB;
 create table if not exists Publisher(
-	Publisher_id varchar(30) not null,
+	Publisher_id int not null,
 	Name varchar(30) not null,
 	primary key(Publisher_id)
 )
 engine = InnoDB;
 
 create table if not exists Book_Publisher(
-	Publisher_id varchar(30) not null,
+	Publisher_id int not null,
 	ISBN varchar(30) not null,
-	primary key (Publisher_id),
+	primary key (Publisher_id, ISBN),
 	constraint fk_Publisher_id
 		foreign key (Publisher_id)
 		references Publisher (Publisher_id)
@@ -67,13 +67,18 @@ create table if not exists Users (
 	First_Name Varchar(30) not null,
 	Last_Name Varchar(30) not null,
 	Status Varchar(30) not null,
-	Phone_number Integer not null,
+	Phone_number Varchar(30) not null,
 	Email Varchar(30) not null,
 	Books_Lended Integer not null,
 	Books_Owed Integer not null,
 	School_Name Varchar(30) not null,
 	Registration_Date timestamp,
-	primary key(Username)
+	primary key(Username),
+	constraint fk_school_name
+		foreign key (School_name)
+		references School (Name)
+		on delete restrict
+		on update cascade
 )
 engine = InnoDB;
 
@@ -87,7 +92,7 @@ engine = InnoDB;
 create table if not exists Book_Author(
 	Author_id varchar(30) not null,
 	ISBN varchar(30) not null,
-	primary key (Author_id),
+	primary key (Author_id, ISBN),
 	constraint fk_Author_id
 		foreign key (Author_id)
 		references Author (Author_id)
@@ -112,7 +117,7 @@ engine = InnoDB;
 create table if not exists Book_Subject(
 	Subject_id int not null,
 	ISBN varchar(30) not null,
-	primary key (Subject_id),
+	primary key (Subject_id, ISBN),
 	constraint fk_Subject_id	
 		foreign key (Subject_id)
 		references Subject (Subject_id)
@@ -131,8 +136,8 @@ create table if not exists Reviews (
 	Review longtext not null,
 	Username Varchar(30) not null,
 	Post_Date timestamp,
-	Last_Update timestamp, #emena den mou vgazei thema alla to allazw giati san timestamp vgazei pio poly nohma - swthrhs
-	ISBN Varchar(30),θέμα
+	Last_Update date, #για καποιο λόγο το βγάζει με θέμα
+	ISBN Varchar(30),
 	Title Varchar(30),
 	primary key(Serial_number),
 	constraint fk_Username_rev
@@ -168,30 +173,6 @@ create table if not exists Lending (
 		  on update cascade
 )
 engine = InnoDB;
-
-DELIMITER //
-
-CREATE trigger if not exists trg_LendingInsert
-	BEFORE INSERT ON Lending
-	FOR EACH ROW
-BEGIN
-	DECLARE lending_count INT;
-
-	SET lending_count = (
-		SELECT COUNT(*)
-		FROM Lending
-		WHERE Username = NEW.Username
-		AND Working_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
-	);
-
-	IF lending_count >= 2 THEN
-		SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'Maximum number of lendings reached for this user in one week.';
-	END IF;
-END //
-
-DELIMITER ;
-
 create table if not exists Booking (
 	Serial_number int not null,
 	Making_date timestamp not null default CURRENT_DATE,
