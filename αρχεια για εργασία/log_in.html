@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Log in Page</title>
+    </head>
+    <body>
+        <article id="log_in">
+            <fieldset>
+                <legend>Log In</legend>
+                <p>
+                    <label for="Username">Username</label>
+                    <input type="text" name="Username" id="Username" autocomplete="on" required>
+                </p>
+                <p>
+                    <label for="Password">Password</label>
+                    <input type="password" name="Password" id="Password" required>
+                </p>
+                <br>
+                <!--Ανάλογα με το status του κάθε χρήστη θα ανοίγει διαφορετικό menu, προσωρινά θα ανοίγει το menu των student και teacher-->
+                <a href="main_menu_student-teacher.html">
+                    <button type="button">Done</button>
+                </a>
+            </fieldset>  
+            <p>
+                Not having an account?
+                <br>
+                <a href="sign_up.html">Sign up</a>
+            </p>
+        </article>
+    </body>
+</html>
