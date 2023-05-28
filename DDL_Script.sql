@@ -144,7 +144,7 @@ create table if not exists Reviews (
 	Review longtext not null,
 	Username Varchar(30) not null,
 	Post_Date timestamp,
-	Last_Update timestamp, #gamw to spitaki mou
+	Last_Update timestamp default CURRENT_TIMESTAMP, #gamw to spitaki mou
 	ISBN Varchar(30),
 	Status ENUM ('Pending', 'Accepted', 'Deleted', 'Removed'),
 	Title Varchar(30),
