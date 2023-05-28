@@ -1,0 +1,368 @@
+create table if not exists School (
+	Name varchar(30) not null,
+	Address varchar(30) not null,
+	Postal_code int not null,
+	City varchar(30) not null,
+	Phone_number int not null,
+	Email varchar(30) not null,
+	Headmaster_name varchar(30) not null,
+	School_admin_name varchar(30) not null,
+	primary key (Name)
+)
+engine = InnoDB;
+
+create table if not exists Books (
+	ISBN varchar(30) not null,
+	Title varchar(30) not null,
+	Summary text not null,
+	No_pages integer not null,
+	Image BLOB not null not null,
+	Book_language varchar(30) not null,
+	Key_words text not null,
+	primary key(ISBN)
+)
+engine = InnoDB;
+
+create table if not exists Copies( #SOSOSOSOSOSOSOSOSOSOSOSOSOSOSOSOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  ISBN varchar(30) not null,
+  No_of_copies int DEFAULT 1,
+  School_Name varchar(30) not null, # DEN YPHRXE PRIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  Available_copies int DEFAULT 1,
+  primary key (ISBN, School_Name), 
+  constraint fk_copies_isbn
+    foreign key (ISBN)
+    references Books (ISBN)
+    on delete restrict
+    on update cascade,
+  constraint fk_copies_school_name
+    foreign key(School_Name)
+    references School(Name)
+    on delete restrict
+    on update cascade,
+  constraint total_copies_non_negative
+    CHECK (No_of_copies >= 0),
+  constraint available_copies_non_negative
+    CHECK (Available_copies >= 0),
+  constraint available_less_than_total
+    CHECK (Available_copies >= No_of_copies)
+)
+engine = InnoDB;
+
+create table if not exists Publisher(
+	Publisher_id Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!
+	Name varchar(30) not null,
+	primary key(Publisher_id)
+)
+engine = InnoDB;
+
+create table if not exists Book_Publisher(
+	Publisher_id Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!
+	ISBN varchar(30) not null,
+	primary key (Publisher_id),
+	constraint fk_Publisher_id
+		foreign key (Publisher_id)
+		references Publisher (Publisher_id)
+		on delete restrict
+		on update cascade,
+	constraint fk_published_isbn
+		foreign key (ISBN)
+		references Books (ISBN)
+		on delete restrict
+		on update cascade
+)
+engine = InnoDB;
+
+
+create table if not exists Users (
+	Username Varchar(30) not null,
+	Password Varchar(30) not null,
+	First_Name Varchar(30) not null,
+	Last_Name Varchar(30) not null,
+	Status Enum ('Student', 'Personnel', 'Admin', 'Central Admin', 'Suspended', 'Banned') not null, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Phone_number Integer not null,
+	Email Varchar(30) not null,
+	Books_Lended Integer not null default 0,
+	Books_Owed Integer not null default 0,
+	School_Name Varchar(30) not null,
+	Registration_Date timestamp default CURRENT_TIMESTAMP,
+	Last_Update timestamp default CURRENT_TIMESTAMP,
+	primary key(Username)
+)
+engine = InnoDB;
+
+create table if not exists Author(
+	Author_id Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Name varchar(30) not null,
+	primary key(Author_id)
+)
+engine = InnoDB;
+
+create table if not exists Book_Author(
+	Author_id Integer not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	ISBN varchar(30) not null,
+	primary key (Author_id, ISBN), # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	constraint fk_Author_id
+		foreign key (Author_id)
+		references Author (Author_id)
+		on delete restrict
+		on update cascade,
+	constraint fk_writen_isbn
+		foreign key (ISBN)
+		references Books (ISBN)
+		on delete restrict
+		on update cascade
+)
+engine = InnoDB;
+
+
+create table if not exists Subject(
+	Subject_id Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Subject_name varchar(30) not null,
+	primary key(Subject_id)
+)
+engine = InnoDB;
+
+create table if not exists Book_Subject(
+	Subject_id INTEGER not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	ISBN varchar(30) not null,
+	primary key (Subject_id),
+	constraint fk_Subject_id	
+		foreign key (Subject_id)
+		references Subject (Subject_id)
+		on delete restrict
+		on update cascade,
+	constraint fk_subject_isbn
+		foreign key (ISBN)
+		references Books (ISBN)
+		on delete restrict
+		on update cascade
+)
+engine = InnoDB;
+
+create table if not exists Reviews (
+	Serial_Number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Review longtext not null,
+	Username Varchar(30) not null,
+	Post_Date timestamp,
+	Last_Update timestamp, #gamw to spitaki mou
+	ISBN Varchar(30),
+	Status ENUM ('Pending', 'Accepted', 'Deleted', 'Removed'),
+	Title Varchar(30),
+	primary key(Serial_number),
+	constraint fk_Username_rev
+		foreign key (Username) 
+		references Users (Username)
+		on delete restrict
+		on update cascade,
+	constraint fk_ISBN_rev
+		foreign key (ISBN) 
+		references Books (ISBN)
+		on delete restrict
+		on update cascade
+)
+engine = InnoDB;
+
+create table if not exists Lending (
+	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Making_date date not null default CURRENT_DATE, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! timestamp -> date
+	Username Varchar(30) not null,
+	Return_status ENUM('Owed', 'Returned') default 'Owed',
+	ISBN Varchar(30) not null,
+	primary key(Serial_number),
+	constraint fk_Lending_User
+	      foreign key (Username)
+	      references Users (Username)
+	      on delete restrict
+		  on update cascade,
+	constraint fk_Lending_ISBN
+	      foreign key (ISBN)
+	      references Books(ISBN)
+	      on delete restrict
+		  on update cascade
+)
+engine = InnoDB;
+
+create table if not exists Booking (
+	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Making_date date not null default CURRENT_DATE,
+	Username Varchar(30) not null,
+	ISBN Varchar(30) not null,
+	Status enum('Pending', 'Accepted', 'Aborted', 'Denied') default 'Pending',
+	primary key(Serial_number),
+	constraint fk_Booking_User
+	      foreign key (Username)
+	      references Users (Username)
+	      on delete restrict
+		  on update cascade,
+	constraint fk_Booking_ISBN
+	      foreign key (ISBN)
+	      references Books(ISBN)
+	      on delete restrict
+		  on update cascade
+)
+engine = InnoDB;
+
+CREATE TRIGGER if not exists trg_Lending_Insert
+	BEFORE INSERT ON Lending
+	FOR EACH ROW
+BEGIN
+	DECLARE lending_count INT;
+
+	SET lending_count = (
+		SELECT COUNT(*)
+		FROM Lending
+		WHERE Username = NEW.Username
+		AND Making_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
+	);
+
+	IF lending_count >= 2 THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'Maximum number of lendings reached for this user in one week.';
+	ELSE
+	  UPDATE Users
+	     SET Books_Lended = Books_Lended + 1
+	     WHERE Username = NEW.Username;
+	END IF;
+	
+END;
+
+
+CREATE TRIGGER IF NOT EXISTS trg_Lending_With_Overdue_Lending
+BEFORE INSERT ON Lending
+FOR EACH ROW
+BEGIN
+  IF (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username
+    AND Making_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)) > 0 THEN
+    SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'User has an overdue lending.';
+  END IF;
+END ;
+
+CREATE TRIGGER IF NOT EXISTS trg_Booking_With_Overdue_Lending
+BEFORE INSERT ON Booking
+FOR EACH ROW
+BEGIN
+  IF (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username
+    AND Making_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)) > 0 THEN
+    SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'User has an overdue lending.';
+  END IF;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_Booking_to_Lending
+AFTER UPDATE ON Booking
+FOR EACH ROW
+BEGIN
+    IF NEW.Status = 'Accepted' AND OLD.Status = 'Pending' THEN
+        INSERT INTO Lending (Username, ISBN)
+        VALUES (NEW.Username, NEW.ISBN);
+    END IF;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_Copies_Lendings
+BEFORE UPDATE ON Lending
+FOR EACH ROW
+BEGIN
+    DECLARE scl varchar(30);
+    DECLARE isbnnn varchar(30);
+
+    SELECT School_Name INTO scl FROM Users Where Username = NEW.Username;
+    SET isbnnn = NEW.ISBN;
+    
+    IF (SELECT Available_copies FROM Copies WHERE School_Name=Scl
+      AND ISBN=isbnnn) > 0 THEN
+      UPDATE Copies SET Available_copies = Available_copies -1
+      WHERE School_Name=Scl AND ISBN=isbnnn;
+    ELSE 
+      SIGNAL SQLSTATE '45000'
+		  SET MESSAGE_TEXT = 'No Available copies.';
+    END IF;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_Copies_Bookings
+BEFORE UPDATE ON Booking
+FOR EACH ROW
+BEGIN
+    DECLARE scl varchar(30);
+    DECLARE isbnnn varchar(30);
+
+    SELECT School_Name INTO scl FROM Users Where Username = NEW.Username;
+    SET isbnnn = NEW.ISBN;
+    
+    IF (SELECT Available_copies FROM Copies WHERE School_Name=Scl
+      AND ISBN=isbnnn) > 0 THEN
+      UPDATE Copies SET Available_copies = Available_copies -1
+      WHERE School_Name=Scl AND ISBN=isbnnn;
+    ELSE 
+      SIGNAL SQLSTATE '45000'
+		  SET MESSAGE_TEXT = 'No Available copies.';
+    END IF;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_Users_Status_Updates
+BEFORE UPDATE ON Users
+FOR EACH ROW
+BEGIN
+  IF OLD.Status = 'Administrator' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE School_Name = OLD.School_Name AND Status = 'Administrator') = 1 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Error on update: School has no other administrators';
+    END IF;
+  END IF;
+  
+  IF OLD.Status = 'Central Administrator' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE Status = 'Central Administrator') = 1 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Error on update: No other central administrators';
+    END IF;
+  END IF;
+  
+  IF NOT OLD.Status = 'Student' AND NEW.Status = 'Student' THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Error on update: Cannot change status to student';
+  END IF;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_User_Deletions
+BEFORE DELETE ON Users
+FOR EACH ROW
+BEGIN
+  IF OLD.Status = 'Administrator' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE School_Name = OLD.School_Name AND Status = 'Administrator') = 1 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Error on delete: School has no other administrators';
+    END IF;
+  END IF;
+  
+  IF OLD.Status = 'Central Administrator' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE Status = 'Central Administrator') = 1 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Error on delete: No other central administrators';
+    END IF;
+  END IF;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_Last_Update_Reviews
+BEFORE UPDATE ON Reviews
+FOR EACH ROW
+BEGIN
+	IF NOT OLD.Review = NEW.Review THEN
+		SET NEW.Last_Update = CURRENT_TIMESTAMP;
+		IF (SELECT Status FROM Users WHERE Username = NEW.Username) = 'Student' THEN
+			SET NEW.Status = 'Pending';
+		END IF;
+		SET NEW.Last_Update = CURRENT_TIMESTAMP;
+	END IF;
+END;
+
+CREATE TRIGGER IF NOT EXISTS trg_User_suspended_or_banned
+BEFORE UPDATE ON Users
+FOR EACH ROW
+BEGIN
+	IF NEW.Status = 'Suspended' THEN
+		UPDATE Reviews SET Status = 'Pending' WHERE Username = OLD.Username;
+	END IF;
+	IF NEW.Status = 'Banned' THEN
+		DELETE FROM Reviews WHERE Username = OLD.Username;
+	END IF;
+END;
