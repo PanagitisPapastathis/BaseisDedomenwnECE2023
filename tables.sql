@@ -26,11 +26,12 @@ engine = InnoDB;
 #sta books na valoume index gia ton titlo
 
 create table if not exists Copies( #SOSOSOSOSOSOSOSOSOSOSOSOSOSOSOSOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  Copy_id Integer AUTO_INCREMENT,
   ISBN varchar(30) not null,
   No_of_copies int DEFAULT 1,
   School_Name varchar(30) not null, # DEN YPHRXE PRIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   Available_copies int DEFAULT 1,
-  primary key (ISBN, School_Name), 
+  primary key (Copy_id), 
   constraint fk_copies_isbn
     foreign key (ISBN)
     references Books (ISBN)
@@ -60,7 +61,7 @@ engine = InnoDB;
 create table if not exists Book_Publisher(
 	Publisher_id Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!
 	ISBN varchar(30) not null,
-	primary key (Publisher_id),
+	primary key (ISBN, Publisher_id),
 	constraint fk_Publisher_id
 		foreign key (Publisher_id)
 		references Publisher (Publisher_id)
@@ -102,7 +103,7 @@ engine = InnoDB;
 create table if not exists Book_Author(
 	Author_id Integer not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	ISBN varchar(30) not null,
-	primary key (Author_id, ISBN), # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	primary key (ISBN,Author_id), # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	constraint fk_Author_id
 		foreign key (Author_id)
 		references Author (Author_id)
@@ -118,7 +119,7 @@ engine = InnoDB;
 
 
 create table if not exists Subject(
-	Subject_id Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Subject_id Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Subject_name varchar(30) not null,
 	primary key(Subject_id)
 )
@@ -127,7 +128,7 @@ engine = InnoDB;
 create table if not exists Book_Subject(
 	Subject_id INTEGER not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	ISBN varchar(30) not null,
-	primary key (Subject_id),
+	primary key (ISBN,Subject_id),
 	constraint fk_Subject_id	
 		foreign key (Subject_id)
 		references Subject (Subject_id)
