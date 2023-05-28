@@ -26,7 +26,7 @@ engine = InnoDB;
 #sta books na valoume index gia ton titlo
 
 create table if not exists Copies( #SOSOSOSOSOSOSOSOSOSOSOSOSOSOSOSOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  Copy_id Integer AUTO_INCREMENT,
+  Copy_id Integer AUTO_INCREMENT, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
   ISBN varchar(30) not null,
   No_of_copies int DEFAULT 1,
   School_Name varchar(30) not null, # DEN YPHRXE PRIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
