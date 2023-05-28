@@ -29,13 +29,17 @@ create table if not exists Books (
 engine = InnoDB;
 create table if not exists Copies(
 	ISBN varchar(30) not null,
+	School_Name VARCHAR(30) not null,
 	Status enum('Free', 'Lended', 'Booked'),
-	no_of_copies int,
-	Available_copies int,
-	primary key (ISBN),
+	no_of_copies int default 1,
+	Available_copies int default 1,
+	primary key (ISBN, School_Name),
 	constraint fk_copies_isbn
 		foreign key (ISBN)
-		references Books (ISBN)
+		references Books (ISBN),
+	constraint fk_School_Name
+		foreign key (School_Name)
+		references School (Name)
 )
 engine = InnoDB;
 create table if not exists Publisher(
@@ -47,7 +51,7 @@ engine = InnoDB;
 create table if not exists Book_Publisher(
 	Publisher_id varchar(30) not null,
 	ISBN varchar(30) not null,
-	primary key (Publisher_id),
+	primary key (Publisher_id,ISBN),
 	constraint fk_Publisher_id
 		foreign key (Publisher_id)
 		references Publisher (Publisher_id),
@@ -83,7 +87,7 @@ engine = InnoDB;
 create table if not exists Book_Author(
 	Author_id varchar(30) not null,
 	ISBN varchar(30) not null,
-	primary key (Author_id),
+	primary key (Author_id, ISBN),
 	constraint fk_Author_id
 		foreign key (Author_id)
 		references Author (Author_id),
@@ -101,7 +105,7 @@ engine = InnoDB;
 create table if not exists Book_Subject(
 	Subject_id int not null,
 	ISBN varchar(30) not null,
-	primary key (Subject_id),
+	primary key (Subject_id, ISBN),
 	constraint fk_Subject_id
 		foreign key (Subject_id)
 		references Subject (Subject_id),
