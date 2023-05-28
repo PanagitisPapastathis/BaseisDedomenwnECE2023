@@ -182,25 +182,7 @@ create table if not exists Lending (
 )
 engine = InnoDB;
 
-create table if not exists Booking (
-	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
-	Making_date date not null default CURRENT_DATE,
-	Username Varchar(30) not null,
-	ISBN Varchar(30) not null,
-	Status enum('Pending', 'Accepted', 'Aborted', 'Denied') default 'Pending',
-	primary key(Serial_number),
-	constraint fk_Booking_User
-	      foreign key (Username)
-	      references Users (Username)
-	      on delete restrict
-		  on update cascade,
-	constraint fk_Booking_ISBN
-	      foreign key (ISBN)
-	      references Books(ISBN)
-	      on delete restrict
-		  on update cascade
-)
-engine = InnoDB;
+DELIMITER //
 
 CREATE TRIGGER if not exists trg_Lending_Insert
 	BEFORE INSERT ON Lending
@@ -224,7 +206,29 @@ BEGIN
 	     WHERE Username = NEW.Username;
 	END IF;
 	
-END;
+END //
+
+DELIMITER ;
+
+create table if not exists Booking (
+	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Making_date date not null default CURRENT_DATE,
+	Username Varchar(30) not null,
+	ISBN Varchar(30) not null,
+	Status enum('Pending', 'Accepted', 'Aborted', 'Denied') default 'Pending',
+	primary key(Serial_number),
+	constraint fk_Booking_User
+	      foreign key (Username)
+	      references Users (Username)
+	      on delete restrict
+		  on update cascade,
+	constraint fk_Booking_ISBN
+	      foreign key (ISBN)
+	      references Books(ISBN)
+	      on delete restrict
+		  on update cascade
+)
+engine = InnoDB;
 
 DELIMITER //
 
