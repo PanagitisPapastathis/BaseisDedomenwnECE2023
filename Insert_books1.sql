@@ -1,7 +1,7 @@
 INSERT INTO Books (ISBN, Title, Summary, No_pages, Image, Book_language, Key_words) VALUES
 ('9786589711377', '1984', 'A dystopian novel set in a totalitarian society.', 328, 'https://m.media-amazon.com/images/I/41yN1NYjE8L._SX324_BO1,204,203,200_.jpg', 'English', 'dystopia, surveillance, politics'),
 ('9780446310789', 'To Kill a Mockingbird', 'A novel about racial injustice in the American South.', 324, 'https://m.media-amazon.com/images/I/51N5qVjuKAL._SX309_BO1,204,203,200_.jpg', 'English', 'race, justice, coming of age'),
-('9780370007724', 'Where the Wild Things Are', 'A children\'s picture book about a young boy named Max.', 48, 'https://m.media-amazon.com/images/I/61iyA9xgRDL._SY448_BO1,204,203,200_.jpg', 'English', 'imagination, adventure, monsters'),
+#('9780370007724', 'Where the Wild Things Are', 'A children\'s picture book about a young boy named Max.', 48, 'https://m.media-amazon.com/images/I/61iyA9xgRDL._SY448_BO1,204,203,200_.jpg', 'English', 'imagination, adventure, monsters'),
 ('9781338878929', 'Harry Potter and the Sorcerer\'s Stone', 'The first book in the Harry Potter series.', 320, 'https://m.media-amazon.com/images/I/51HSkTKlauL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg', 'English', 'magic, friendship, adventure'),
 ('9780316769488', 'The Catcher in the Rye', 'A novel narrated by a disaffected teenager named Holden Caulfield.', 224, 'https://m.media-amazon.com/images/I/61fgOuZfBGL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg', 'English', 'adolescence, alienation, identity'),
 ('9780141439518', 'Pride and Prejudice', 'A classic novel about love and social class in 19th-century England.', 480, 'https://m.media-amazon.com/images/I/41Pkt5tUWiL._SX324_BO1,204,203,200_.jpg', 'English', 'romance, social class, satire'),
