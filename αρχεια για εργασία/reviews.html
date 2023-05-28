@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Review Submission</title>
+    </head>
+    <body>
+        <header>
+            <h1> Submit your Review </h1>
+        </header>
+        <main>
+            <article>
+                <p>
+                    <label for="title">Title</label>
+                    <select name="title" id="title">
+                        <!--Ως επιλογές θα είναι όλοι οι διαθέσιμοι τίτλοι βιβλίων της βιβλιοθήκης-->
+                    </select>
+                </p>
+                <p>
+                    <label for="review">Write your Review:</label>
+                    <br>
+                    <textarea name="review" id="review" cols="100" rows="10"></textarea>
+                </p>
+                <p>
+                    <button type="submit">Submit</button>
+                </p>
+                <p>
+                    <!--Ανάλογα με το status του κάθε χρήστη θα ανοίγει διαφορετικό menu, προσωρινά θα ανοίγει το menu των student και teacher-->
+                    <a href="main_menu_student-teacher.html">
+                        <button type="button">Cancel</button>
+                    </a>
+                </p>
+            </article>
+        </main>
+    </body>
+</html>
