@@ -58,7 +58,7 @@ engine = InnoDB;
 create table if not exists Book_Publisher(
 	Publisher_id Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!
 	ISBN varchar(30) not null,
-	primary key (Publisher_id),
+	primary key (Publisher_id,ISBN), # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	constraint fk_Publisher_id
 		foreign key (Publisher_id)
 		references Publisher (Publisher_id)
