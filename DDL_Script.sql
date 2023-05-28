@@ -13,7 +13,7 @@ engine = InnoDB;
 
 create table if not exists Books (
 	ISBN varchar(30) not null,
-	Title varchar(30) not null,
+	Title varchar(100) not null,
 	Summary text not null,
 	No_pages integer not null,
 	Image BLOB not null not null,
@@ -22,6 +22,8 @@ create table if not exists Books (
 	primary key(ISBN)
 )
 engine = InnoDB;
+
+#sta books na valoume index gia ton titlo
 
 create table if not exists Copies( #SOSOSOSOSOSOSOSOSOSOSOSOSOSOSOSOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   ISBN varchar(30) not null,

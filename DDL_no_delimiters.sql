@@ -13,7 +13,7 @@ engine = InnoDB;
 
 create table if not exists Books (
 	ISBN varchar(30) not null,
-	Title varchar(30) not null,
+	Title varchar(100) not null,
 	Summary text not null,
 	No_pages integer not null,
 	Image BLOB not null not null,
