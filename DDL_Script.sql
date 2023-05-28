@@ -202,8 +202,6 @@ create table if not exists Booking (
 )
 engine = InnoDB;
 
-DELIMITER //
-
 CREATE TRIGGER if not exists trg_Lending_Insert
 	BEFORE INSERT ON Lending
 	FOR EACH ROW
@@ -226,8 +224,7 @@ BEGIN
 	     WHERE Username = NEW.Username;
 	END IF;
 	
-END //
-DELIMITER ;
+END;
 
 DELIMITER //
 
