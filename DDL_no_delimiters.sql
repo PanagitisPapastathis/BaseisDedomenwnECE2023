@@ -143,8 +143,8 @@ create table if not exists Reviews (
 	Serial_Number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Review longtext not null,
 	Username Varchar(30) not null,
-	Post_Date timestamp,
-	Last_Update timestamp, #gamw to spitaki mou
+	Post_Date timestamp default CURRENT_TIMESTAMP,
+	Last_Update timestamp default CURRENT_TIMESTAMP, #gamw to spitaki mou
 	ISBN Varchar(30),
 	Status ENUM ('Pending', 'Accepted', 'Deleted', 'Removed'),
 	Title Varchar(30),
