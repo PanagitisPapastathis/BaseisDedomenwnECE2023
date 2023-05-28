@@ -182,8 +182,6 @@ create table if not exists Lending (
 )
 engine = InnoDB;
 
-DELIMITER ;
-
 create table if not exists Booking (
 	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Making_date date not null default CURRENT_DATE,
@@ -229,6 +227,7 @@ BEGIN
 	END IF;
 	
 END //
+DELIMITER ;
 
 DELIMITER //
 
