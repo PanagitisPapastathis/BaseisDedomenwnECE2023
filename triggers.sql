@@ -199,7 +199,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER delete_expired_bookings
+CREATE TRIGGER delete_expired_bookings #provlhmatiko
 AFTER INSERT ON Booking
 FOR EACH ROW
 BEGIN
