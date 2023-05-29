@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Books</title>
+        <link rel="stylesheet" href="main.css" type="text/css">
+    </head>
+    <body>
+        <header>Books</header>
+        <main>
+            <article id="filters">
+                <fieldset>
+                    <legend>Filters</legend>
+                    <p>
+                        <label for="Categories">Choose Category:</label>
+                        <select name="Categories" id="Categories">
+                            <option value="Category 1">Category 1</option>
+                            <option value="Category 2">Category 2</option>
+                            <option value="Category 3">Category 3</option>
+                        </select>
+                        <br> <br>
+                        <label for="ISBN">Write ISBN:</label>
+                        <input type="text" name="ISBN" id="ISBN">
+                        <br> <br> 
+                        <button type="button">Done</button>
+                    </p>
+                </fieldset>
+            </article>
+            <br> 
+            <article id="admin_operations">
+                <p>
+                    Add a new book:
+                    <a href="add_book.html">
+                        <button type="button">Add Book</button>
+                    </a>
+                </p>
+            </article>
+            <br>
+            <article id="books_table">
+                <table>
+                    <thread>
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">ISBN</th>
+                            <th scope="col">Categories</th>
+                            <th scope="col">More Info</th>
+                        </tr>
+                    </thread>
+                    <tbody>
+                            <tr>
+                                <td>Book title</td>
+                                <td>Book ISBN</td>
+                                <td>Book Categories</td>
+                                <td>
+                                    <button type="button">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Book 2 title</td>
+                                <td>Book 2 ISBN</td>
+                                <td>Book 2 Categories</td>
+                                <td>
+                                    <button type="button">View</button>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+                <br>
+                <a href="main_menu_school_admin.html">
+                    <button type="button">Back</button>
+                </a>
+            </article>
+        </main>
+    </body>
+</html>
