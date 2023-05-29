@@ -196,3 +196,18 @@ BEGIN
 END//
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER delete_expired_bookings
+AFTER INSERT ON Booking
+FOR EACH ROW
+BEGIN
+    DECLARE expired_date DATE;
+    SET expired_date = DATE_SUB(NEW.Making_date, INTERVAL 1 WEEK);
+    
+    DELETE FROM Booking
+    WHERE Making_date <= expired_date;
+END;
+
+DELIMITER;
