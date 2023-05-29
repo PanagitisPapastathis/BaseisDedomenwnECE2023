@@ -179,7 +179,7 @@ create table if not exists Lending (
 		  on update cascade,
 	constraint fk_Lending_ISBN
 	      foreign key (ISBN)
-	      references Books(ISBN)
+	      references Copies(ISBN)
 	      on delete restrict
 		  on update cascade
 )
@@ -199,7 +199,7 @@ create table if not exists Booking (
 		  on update cascade,
 	constraint fk_Booking_ISBN
 	      foreign key (ISBN)
-	      references Books(ISBN)
+	      references Copies(ISBN)
 	      on delete restrict
 		  on update cascade
 )
