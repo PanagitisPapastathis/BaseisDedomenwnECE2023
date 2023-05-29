@@ -81,7 +81,7 @@ create table if not exists Users (
 	Password Varchar(30) not null,
 	First_Name Varchar(30) not null,
 	Last_Name Varchar(30) not null,
-	Status Enum ('Student', 'Personnel', 'Admin', 'Central Admin', 'Suspended', 'Banned') not null, 
+	Status Enum ('Student', 'Teacher', 'Admin', 'Central Admin', 'Suspended', 'Banned') not null, 
 	Phone_number Integer not null,
 	Email Varchar(30) not null,
 	Books_Lended Integer not null default 0,
