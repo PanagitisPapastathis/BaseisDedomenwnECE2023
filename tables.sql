@@ -1,12 +1,12 @@
 create table if not exists School (
-	Name varchar(30) not null,
+	Name varchar(50) not null,
 	Address varchar(30) not null,
 	Postal_code int not null,
 	City varchar(30) not null,
-	Phone_number int not null,
+	Phone_number varchar(15) not null,
 	Email varchar(30) not null,
-	Headmaster_name varchar(30) not null,
-	School_admin_name varchar(30) not null,
+	Headmaster_name varchar(50) not null,
+	School_admin_name varchar(50) not null,
 	primary key (Name)
 )
 engine = InnoDB;
@@ -16,7 +16,7 @@ create table if not exists Books (
 	Title varchar(100) not null,
 	Summary text not null,
 	No_pages integer not null,
-	Image BLOB not null not null,
+	Image text not null,
 	Book_language varchar(30) not null,
 	Key_words text not null,
 	primary key(ISBN)
@@ -25,11 +25,11 @@ engine = InnoDB;
 
 #sta books na valoume index gia ton titlo
 
-create table if not exists Copies( #SOSOSOSOSOSOSOSOSOSOSOSOSOSOSOSOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  Copy_id Integer AUTO_INCREMENT, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+create table if not exists Copies( # SOSOSOSOSOSOSOSOSOSOSOSOSOSOSOSOS
+  Copy_id Integer AUTO_INCREMENT,
   ISBN varchar(30) not null,
   No_of_copies int DEFAULT 1,
-  School_Name varchar(30) not null, # DEN YPHRXE PRIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  School_Name varchar(50) not null,
   Available_copies int DEFAULT 1,
   primary key (Copy_id), 
   constraint fk_copies_isbn
@@ -52,7 +52,7 @@ create table if not exists Copies( #SOSOSOSOSOSOSOSOSOSOSOSOSOSOSOSOS !!!!!!!!!!
 engine = InnoDB;
 
 create table if not exists Publisher(
-	Publisher_id Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!
+	Publisher_id Integer AUTO_INCREMENT, # ligo apsyxologhto alla ok
 	Name varchar(30) not null,
 	primary key(Publisher_id)
 )
@@ -81,7 +81,7 @@ create table if not exists Users (
 	Password Varchar(30) not null,
 	First_Name Varchar(30) not null,
 	Last_Name Varchar(30) not null,
-	Status Enum ('Student', 'Personnel', 'Admin', 'Central Admin', 'Suspended', 'Banned') not null, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Status Enum ('Student', 'Personnel', 'Admin', 'Central Admin', 'Suspended', 'Banned') not null, 
 	Phone_number Integer not null,
 	Email Varchar(30) not null,
 	Books_Lended Integer not null default 0,
@@ -101,9 +101,9 @@ create table if not exists Author(
 engine = InnoDB;
 
 create table if not exists Book_Author(
-	Author_id Integer not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Author_id Integer not null, 
 	ISBN varchar(30) not null,
-	primary key (ISBN,Author_id), # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	primary key (ISBN,Author_id), # !!!!!!!!!!!!!!!!!!!!!!
 	constraint fk_Author_id
 		foreign key (Author_id)
 		references Author (Author_id)
@@ -119,7 +119,7 @@ engine = InnoDB;
 
 
 create table if not exists Subject(
-	Subject_id Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Subject_id Integer AUTO_INCREMENT, # pali ligo apsyxologhto
 	Subject_name varchar(30) not null,
 	primary key(Subject_id)
 )
