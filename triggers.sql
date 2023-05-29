@@ -191,7 +191,7 @@ BEGIN
 		UPDATE Reviews SET Status = 'Pending' WHERE Username = OLD.Username;
 	END IF;
 	IF NEW.Status = 'Banned' THEN
-		DELETE FROM Reviews WHERE Username = OLD.Username;
+		DUPDATE Reviews SET Status = 'Removed' WHERE Username = OLD.Username;
 	END IF;
 END//
 
