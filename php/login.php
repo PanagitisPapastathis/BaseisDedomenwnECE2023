@@ -16,8 +16,11 @@
 
         $username = $_POST["username"];
         $password = $_POST["password"];
-
-        $query = "SELECT Password FROM Users WHERE Username = '$username'";
+    
+        session_start();
+        $_SESSION["username"] = $username;
+        
+        $query = "SELECT * FROM Users WHERE username = '$username'";
         $result = mysqli_query($conn, $query);
 
         if ($row = mysqli_fetch_assoc($result)) {
