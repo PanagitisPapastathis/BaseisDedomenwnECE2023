@@ -25,7 +25,7 @@ engine = InnoDB;
 
 #sta books na valoume index gia ton titlo
 
-create table if not exists Copies( # SOSOSOSOSOSOSOSOSOSOSOSOSOSOSOSOS
+create table if not exists Copies(
   Copy_id Integer AUTO_INCREMENT,
   ISBN varchar(30) not null,
   No_of_copies int DEFAULT 1,
@@ -59,7 +59,7 @@ create table if not exists Publisher(
 engine = InnoDB;
 
 create table if not exists Book_Publisher(
-	Publisher_id Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!
+	Publisher_id Integer null,
 	ISBN varchar(30) not null,
 	primary key (ISBN, Publisher_id),
 	constraint fk_Publisher_id
@@ -170,16 +170,16 @@ create table if not exists Lending (
 	Making_date date not null default CURRENT_DATE, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! timestamp -> date
 	Username Varchar(30) not null,
 	Return_status ENUM('Owed', 'Returned') default 'Owed',
-	ISBN Varchar(30) not null,
+	Copy_id Integer not null,
 	primary key(Serial_number),
 	constraint fk_Lending_User
 	      foreign key (Username)
 	      references Users (Username)
 	      on delete restrict
 		  on update cascade,
-	constraint fk_Lending_ISBN
-	      foreign key (ISBN)
-	      references Copies(ISBN)
+	constraint fk_Lending_Copy_Id
+	      foreign key (Copy_id)
+	      references Copies(Copy_id)
 	      on delete restrict
 		  on update cascade
 )
@@ -189,17 +189,17 @@ create table if not exists Booking (
 	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Making_date date not null default CURRENT_DATE,
 	Username Varchar(30) not null,
-	ISBN Varchar(30) not null,
+	Copy_id Integer not null,
 	Status enum('Pending', 'Accepted', 'Aborted', 'Denied') default 'Pending',
-	primary key(Serial_number),
+	primary key(Serial_number, Copy_id),
 	constraint fk_Booking_User
 	      foreign key (Username)
 	      references Users (Username)
 	      on delete restrict
 		  on update cascade,
-	constraint fk_Booking_ISBN
-	      foreign key (ISBN)
-	      references Copies(ISBN)
+	constraint fk_Booking_Copy_id
+	      foreign key (Copy_id)
+	      references Copies(Copy_id)
 	      on delete restrict
 		  on update cascade
 )
