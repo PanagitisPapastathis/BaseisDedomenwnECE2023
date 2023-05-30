@@ -1,35 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Log in Page</title>
-    </head>
-    <body>
-        <?php
-        echo "Hello World!"
-        ?>
-        <article id="log_in">
-            <fieldset>
-                <legend>Log In</legend>
-                <p>
-                    <label for="Username">Username</label>
-                    <input type="text" name="Username" id="Username" autocomplete="on" required>
-                </p>
-                <p>
-                    <label for="Password">Password</label>
-                    <input type="password" name="Password" id="Password" required>
-                </p>
-                <br>
-                <!--Ανάλογα με το status του κάθε χρήστη θα ανοίγει διαφορετικό menu, προσωρινά θα ανοίγει το menu των student και teacher-->
-                <a href="main_menu_student-teacher.html">
-                    <button type="button">Done</button>
-                </a>
-            </fieldset>  
-            <p>
-                Don't have an account?
-                <br>
-                <a href="sign_up.html">Sign up</a>
-            </p>
-        </article>
-    </body>
+<html>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+<h2> Login Page </h2>
+<p>
+    <form method="post" action="login.php">
+    <input type="text" name="username" placeholder="Username" required><br><br>
+    <input type="password" name="password" placeholder="Password" required><br><br>
+    <input type="submit" value="Login"> <br> <br>
+    <?php
+        include 'connection.php';
+        $conn = OpenCon();
+
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+    
+        session_start();
+        $_SESSION["username"] = $username;
+        
+        $query = "SELECT * FROM Users WHERE username = '$username'";
+        $result = mysqli_query($conn, $query);
+
+        if ($row = mysqli_fetch_assoc($result)) {
+            $storedPassword = $row['Password'];
+            $status = $row['Status'];
+        
+            if ($password == $storedPassword) {
+                // Redirect based on user's status
+                switch ($status) {
+                    case 'Student':
+                        header("Location: student.php");
+                        break;
+                    case 'Teacher':
+                        header("Location: teacher.php");
+                        break;
+                    case 'Admin':
+                        header("Location: admin.php");
+                        break;
+                    case 'Central Admin':
+                        header("Location: central_admin.php");
+                        break;
+                    default:
+                        echo "Invalid user status.";
+                }
+                exit; // Make sure to exit after redirecting
+            } else {
+                echo "Incorrect password.";
+            }
+        } else {
+            echo "User does not exist.";
+        }
+        $conn -> close();
+    ?>
+</form>
+</p>
+    <?php if(isset($error)) { echo $error; } ?>
+</body>
 </html>
