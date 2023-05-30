@@ -4,7 +4,7 @@ function OpenCon(){
     $dbhost = "localhost";
     $dbuser = "root";
     $dbpass = "";
-    $dbname = "12";
+    $dbname = "school_lib";
 
     $conn = new mysqli($dbhost, $dbuser, $dbpass,$dbname) or die("Connect failed: %s\n". $conn -> error);
 
