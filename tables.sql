@@ -47,7 +47,7 @@ create table if not exists Copies(
   constraint available_copies_non_negative
     CHECK (Available_copies >= 0),
   constraint available_less_than_total
-    CHECK (Available_copies >= No_of_copies)
+    CHECK (Available_copies <= No_of_copies)
 )
 engine = InnoDB;
 
@@ -90,15 +90,14 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 	School_Name Varchar(30) not null,
 	Registration_Date timestamp default CURRENT_TIMESTAMP,
 	Last_Update timestamp default CURRENT_TIMESTAMP,
-	primary key(Username)
+	primary key(Username),
+	CONSTRAINT fk_User_School
+		FOREIGN KEY (School_Name)
+		REFERENCES School (Name)
+		ON DELETE RESTRICT
+		ON UPDATE CASCADE
 )
 engine = InnoDB;
-
-ALTER TABLE Users ADD CONSTRAINT fk_User_School
-FOREIGN KEY (School_Name)
-REFERENCES Users (Username)
-ON DELETE RESTRICT
-ON UPDATE CASCADE;
 
 create table if not exists Author(
 	Author_id Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!

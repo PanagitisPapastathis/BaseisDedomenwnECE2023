@@ -1,3 +1,4 @@
+
 -- Inserting dummy data into Publisher table
 INSERT INTO Publisher (Name)
 VALUES
@@ -242,21 +243,48 @@ VALUES ('teacher', '1111', 'Jane', 'Doe', 'Teacher', 'Accepted', 123456789, 'jan
 
 -- Inserting dummy data for an admin user
 INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name)
-VALUES ('admin', '1111', 'Robert', 'Johnson', 'Admin', 'Accepted', 987654321, 'robert.johnson@example.com', 0, 0, 'BLIP');
+VALUES ('admin', '1111', 'Robert', 'Johnson', 'Admin', 'Accepted', 987654321, 'robert.johnson@example.com', 0, 0, 'ABC School');
 
 -- Inserting dummy data for a central admin user
 INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name)
-VALUES ('central_admin', '1111', 'Michael', 'Brown', 'Central Admin', 'Accepted', 123456789, 'michael.brown@example.com', 0, 0, 'BLOOP');
+VALUES ('central_admin', '1111', 'Michael', 'Brown', 'Central Admin', 'Accepted', 123456789, 'michael.brown@example.com', 0, 0, 'ABC School');
 
 INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name, Registration_Date, Last_Update)
-VALUES ('pending1', '1111', 'Pending 1', 'User', 'Student', 'Pending', 1234567890, 'pending1@example.com', 0, 0, 'Your School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+VALUES ('pending1', '1111', 'Pending 1', 'User', 'Student', 'Pending', 1234567890, 'pending1@example.com', 0, 0, 'ABC School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name, Registration_Date, Last_Update)
-VALUES ('pending2', '1111', 'Pending 2', 'User', 'Teacher', 'Pending', 1234567890, 'pending2@example.com', 0, 0, 'Your School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+VALUES ('pending2', '1111', 'Pending 2', 'User', 'Teacher', 'Pending', 1234567890, 'pending2@example.com', 0, 0, 'ABC School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name, Registration_Date, Last_Update)
-VALUES ('pending3', '1111', 'Pending 3', 'User', 'Admin', 'Pending', 1234567890, 'pending3@example.com', 0, 0, 'Your School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+VALUES ('pending3', '1111', 'Pending 3', 'User', 'Admin', 'Pending', 1234567890, 'pending3@example.com', 0, 0, 'ABC School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name, Registration_Date, Last_Update)
-VALUES ('pending4', '1111', 'Pending 4', 'User', 'Central Admin', 'Pending', 1234567890, 'pending4@example.com', 0, 0, 'Your School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+VALUES ('pending4', '1111', 'Pending 4', 'User', 'Central Admin', 'Pending', 1234567890, 'pending4@example.com', 0, 0, 'ABC School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+-- Inserting more dummy data into Users table
+INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name)
+VALUES
+    ('user21', 'password21', 'Mark', 'Adams', 'Student', 'Pending', 123457891, 'mark.adams@example.com', 0, 0, 'XYZ School'),
+    ('user22', 'password22', 'Laura', 'Baker', 'Teacher', 'Pending', 987654312, 'laura.baker@example.com', 0, 0, 'ABC School'),
+    ('user23', 'password23', 'Steve', 'Coleman', 'Student', 'Pending', 456789231, 'steve.coleman@example.com', 0, 0, 'XYZ School'),
+    ('user24', 'password24', 'Emma', 'Davies', 'Teacher', 'Pending', 321654789, 'emma.davies@example.com', 0, 0, 'ABC School'),
+    ('user25', 'password25', 'Paul', 'Evans', 'Student', 'Pending', 789123654, 'paul.evans@example.com', 0, 0, 'XYZ School'),
+    ('user26', 'password26', 'Sophie', 'Foster', 'Teacher', 'Pending', 654987123, 'sophie.foster@example.com', 0, 0, 'ABC School'),
+    ('user27', 'password27', 'Ryan', 'Green', 'Student', 'Pending', 951753624, 'ryan.green@example.com', 0, 0, 'XYZ School'),
+    ('user28', 'password28', 'Isabella', 'Harris', 'Teacher', 'Pending', 753951246, 'isabella.harris@example.com', 0, 0, 'ABC School'),
+    ('user29', 'password29', 'George', 'Irwin', 'Student', 'Pending', 852963741, 'george.irwin@example.com', 0, 0, 'XYZ School'),
+    ('user30', 'password30', 'Emily', 'Jackson', 'Teacher', 'Pending', 369258147, 'emily.jackson@example.com', 0, 0, 'ABC School');
+
+-- Inserting more dummy data into Reviews table
+INSERT INTO Reviews (Review, Username, Post_Date, Last_Update, ISBN, Status, Title)
+VALUES
+    ('I hope to read this book soon!', 'user1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 1'),
+    ('Looking forward to this one!', 'user2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 2'),
+    ('Just got this, can\'t wait to start!', 'user3', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 3'),
+    ('Heard great things about this book.', 'user4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 4'),
+    ('Excited to start reading this book!', 'user5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 5'),
+    ('I have this on my reading list.', 'user6', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 6'),
+    ('Can\'t wait to dive into this book!', 'user7', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 7'),
+    ('Eagerly waiting to start this one.', 'user8', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 8'),
+    ('Soon to start reading this one.', 'user9', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 9'),
+    ('Have heard rave reviews about this one.', 'user10', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '9781234567890', 'Pending', 'Sample Book 10');
