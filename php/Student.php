@@ -50,7 +50,7 @@
                     <div class="card-body" id="card">
                         <h4 class="card-title">Books Lended</h4>
                         <p class="card-text" id="paragraph">See all the books you have lend since today.<br></p>
-                        <a class="btn btn-primary" id="show-btn" href="lended_so_far.php">Show</a>
+                        <a class="btn btn-primary" id="show-btn" href="lended_so_far.php">Create</a>
                     </div>
                 </div>
             </div>
