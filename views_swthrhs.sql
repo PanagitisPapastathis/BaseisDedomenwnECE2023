@@ -25,7 +25,7 @@ JOIN Booking ON Copies.Copy_id = Booking.Copy_id
 JOIN Users ON Booking.Username = Users.Username;
 
 CREATE VIEW IF NOT EXISTS Accept_Reviews_Help AS
-SELECT Users.Username, Users.First_Name, Users.Last_Name, Books.Title, Reviews.ISBN, Reviews.Post_Date, Reviews.Serial_Number, Reviews.Review
+SELECT Users.Username, Users.First_Name, Users.Last_Name, Books.Title, Reviews.ISBN, Reviews.Post_Date, Reviews.Serial_Number, Reviews.Review, Reviews.Status
 FROM Reviews
 JOIN Users ON Reviews.Username = Users.Username 
 JOIN Books ON Reviews.ISBN = Books.ISBN
