@@ -247,3 +247,16 @@ VALUES ('admin', '1111', 'Robert', 'Johnson', 'Admin', 'Accepted', 987654321, 'r
 -- Inserting dummy data for a central admin user
 INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name)
 VALUES ('central_admin', '1111', 'Michael', 'Brown', 'Central Admin', 'Accepted', 123456789, 'michael.brown@example.com', 0, 0, 'BLOOP');
+
+INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name, Registration_Date, Last_Update)
+VALUES ('pending1', '1111', 'Pending 1', 'User', 'Student', 'Pending', 1234567890, 'pending1@example.com', 0, 0, 'Your School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name, Registration_Date, Last_Update)
+VALUES ('pending2', '1111', 'Pending 2', 'User', 'Teacher', 'Pending', 1234567890, 'pending2@example.com', 0, 0, 'Your School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name, Registration_Date, Last_Update)
+VALUES ('pending3', '1111', 'Pending 3', 'User', 'Admin', 'Pending', 1234567890, 'pending3@example.com', 0, 0, 'Your School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Users (Username, Password, First_Name, Last_Name, Status, Status2, Phone_number, Email, Books_Lended, Books_Owed, School_Name, Registration_Date, Last_Update)
+VALUES ('pending4', '1111', 'Pending 4', 'User', 'Central Admin', 'Pending', 1234567890, 'pending4@example.com', 0, 0, 'Your School', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
