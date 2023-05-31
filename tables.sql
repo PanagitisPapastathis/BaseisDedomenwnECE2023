@@ -94,6 +94,12 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 )
 engine = InnoDB;
 
+ALTER TABLE Users ADD CONSTRAINT fk_User_School
+FOREIGN KEY (School_Name)
+REFERENCES Users (Username)
+ON DELETE RESTRICT
+ON UPDATE CASCADE;
+
 create table if not exists Author(
 	Author_id Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Name varchar(30) not null,
@@ -144,7 +150,7 @@ create table if not exists Book_Subject(
 engine = InnoDB;
 
 create table if not exists Reviews (
-	Serial_Number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Serial_Number Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Review longtext not null,
 	Username Varchar(30) not null,
 	Post_Date timestamp,
@@ -167,7 +173,7 @@ create table if not exists Reviews (
 engine = InnoDB;
 
 create table if not exists Lending (
-	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Serial_number Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Making_date date not null default CURRENT_DATE, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! timestamp -> date
 	Username Varchar(30) not null,
 	Return_status ENUM('Owed', 'Returned') default 'Owed',
