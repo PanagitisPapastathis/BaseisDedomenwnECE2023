@@ -76,7 +76,7 @@ create table if not exists Book_Publisher(
 engine = InnoDB;
 
 
-create table if not exists Users (
+create table if not exists Users (#mallon oi users den tha prepei na mporoun na diagrafoun alla mono na ginoun deactivated
 	Username Varchar(30) not null,
 	Password Varchar(30) not null,
 	First_Name Varchar(30) not null,
@@ -181,7 +181,7 @@ create table if not exists Lending (
 	constraint fk_Lending_Copy_Id
 	      foreign key (Copy_id)
 	      references Copies(Copy_id)
-	      on delete restrict
+	      on delete restrict # restrict omws mono ama xrwstaei alliws apla menei opws einai xwris na diagrafetai
 		  on update cascade
 )
 engine = InnoDB;
@@ -196,12 +196,12 @@ create table if not exists Booking (
 	constraint fk_Booking_User
 	      foreign key (Username)
 	      references Users (Username)
-	      on delete restrict
+	      on delete cascade
 		  on update cascade,
 	constraint fk_Booking_Copy_id
 	      foreign key (Copy_id)
 	      references Copies(Copy_id)
-	      on delete restrict
+		  on delete cascade
 		  on update cascade
 )
 engine = InnoDB;
