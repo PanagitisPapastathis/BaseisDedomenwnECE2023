@@ -31,16 +31,16 @@
                 // Redirect based on user's status
                 switch ($status) {
                     case 'Student':
-                        header("Location: student.php");
+                        header("Location: /php/Student.php");
                         break;
                     case 'Teacher':
-                        header("Location: teacher.php");
+                        header("Location: /php/teacher.php");
                         break;
                     case 'Admin':
-                        header("Location: admin.php");
+                        header("Location: /php/Admin.php");
                         break;
                     case 'Central Admin':
-                        header("Location: central_admin.php");
+                        header("Location: /php/central_admin.php");
                         break;
                     default:
                         echo "Invalid user status.";
