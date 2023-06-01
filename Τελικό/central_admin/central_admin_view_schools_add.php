@@ -60,7 +60,7 @@
         </div>
         <div class="form-group col-sm-3 mb-3">
         <?php
-        include 'connection.php';
+        include '../connection.php';
         $conn=OpenCon();
         session_start();
     //$name=$_GET['id'];
