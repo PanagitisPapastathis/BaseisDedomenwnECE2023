@@ -156,7 +156,6 @@ create table if not exists Reviews (
 	Last_Update timestamp default CURRENT_TIMESTAMP, #gamw to spitaki mou
 	ISBN Varchar(30),
 	Status ENUM ('Pending', 'Accepted', 'Deleted', 'Removed'),
-	Title Varchar(30),
 	primary key(Serial_number),
 	constraint fk_Username_rev
 		foreign key (Username) 
