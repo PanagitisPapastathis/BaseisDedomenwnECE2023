@@ -28,7 +28,7 @@
                 <div class="card" id="card-container">
                     <div class="card-body" id="card">
                         <?php
-                        include 'connection.php';
+                        include '../connection.php';
                         $conn = OpenCon(); 
                         session_start();
                         $query = "SELECT Username, First_Name, Last_Name, Phone_number, Email, School_Name FROM Users where Status2='Requesting' ";
