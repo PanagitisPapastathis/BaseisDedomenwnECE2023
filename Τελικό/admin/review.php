@@ -16,7 +16,7 @@
                 <input type="radio" name="rating" value="2" id="2"><label for="2">2☆</label>
                 <input type="radio" name="rating" value="1" id="1"><label for="1">1☆</label>
             </div>';
-        echo "<p>Please enter a paragraph of text.</p>";
+        echo "<p>Please enter a paragraph of text.</p>";//apisteuta xrhsimo comment 
     } else {
         echo '<h2>You aren\'t logged in, m8</h2>';
     }
