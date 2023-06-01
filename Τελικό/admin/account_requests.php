@@ -63,7 +63,7 @@
                                     echo '<tbody>';
                                     while($row = mysqli_fetch_row($result)){
                                         echo '<tr>';
-                                            echo '<td>' . $row[0] . '</td>';  // Username
+                                            echo '<td>' . $row[0] . '</td>';  // Username wtf ti eipame oti ekana edw?
                                             echo '<td>' . $row[1] . '</td>';  // First Name
                                             echo '<td>' . $row[2] . '</td>';  // Last Name
                                             echo '<td>' . $row[3] . '</td>';  // Book Title
