@@ -34,14 +34,8 @@
 
                         include '../connection.php';
                         $conn = OpenCon();
-
-                        // Get the username and isbn from the URL parameters
                         $username = $_GET["username"];
                         $copyid = $_GET["copyid"]; 
-
-                        // Protect against SQL injection
-                        $username = mysqli_real_escape_string($conn, $username);
-                        $copyid = mysqli_real_escape_string($conn, $copyid);
 
                         $query = "DELETE FROM Booking WHERE Username = '$username' AND Copy_id = $copyid";///////////////////////////////////////////////////////////////////////////////////////////////
                         if(mysqli_query($conn, $query)) {
