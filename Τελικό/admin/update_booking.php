@@ -37,7 +37,7 @@
                         $username = $_GET["username"];
                         $copyid = $_GET["copyid"]; 
 
-                        $query = "DELETE FROM Booking WHERE Username = '$username' AND Copy_id = $copyid";///////////////////////////////////////////////////////////////////////////////////////////////
+                        $query = "DELETE FROM Booking WHERE Username = '$username' AND Copy_id = $copyid";///////////////////////////////////////////////////////////////////////////////
                         if(mysqli_query($conn, $query)) {
                             echo '<h2>Success!</h2>';
                         } else {
