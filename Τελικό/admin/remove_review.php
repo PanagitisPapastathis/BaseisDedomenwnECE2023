@@ -36,7 +36,7 @@
                         error_reporting(E_ALL);
                         ini_set('display_errors', '1');
                         
-                        include 'connection.php';
+                        include '../connection.php';
                         $conn = OpenCon();
                         $srn = $_POST['srn'];
                         $query = "UPDATE Reviews SET Status = 'Removed' WHERE Serial_Number = $srn";
