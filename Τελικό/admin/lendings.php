@@ -38,7 +38,7 @@
                     <div class="card-body" id="card">
                         <?php
                         
-                        include 'connection.php';
+                        include '../connection.php';
                         $conn = OpenCon();
 
                         $query = "SELECT * FROM Lending_Help";///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
