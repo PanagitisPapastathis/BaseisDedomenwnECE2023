@@ -175,6 +175,7 @@ create table if not exists Lending (
 	Making_date date not null default CURRENT_DATE, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! timestamp -> date
 	Username Varchar(30) not null,
 	Return_status ENUM('Owed', 'Returned') default 'Owed',
+	Return_date date, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Copy_id Integer not null,
 	primary key(Serial_number),
 	constraint fk_Lending_User
