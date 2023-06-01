@@ -23,7 +23,7 @@
         </div>
     </nav>
     <?php
-    include 'connection.php';
+    include '../connection.php';
     $conn=OpenCon();
     session_start();
     $name=$_GET['id'];
