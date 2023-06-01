@@ -78,11 +78,6 @@
                                     echo '</tbody>';
                                 echo '</table>';
                             echo '</div>';
-                            echo '<br>';
-                            echo  "Edit a School:";
-                            echo '<a href="./central_admin_view_schools_update.php">';
-                            echo '<button type="button">Edit</button>';
-                            echo '</a>';
                             echo '<br><br>';
                             echo "Add a School:";
                             echo '<a href="./central_admin_view_schools_add.php">
