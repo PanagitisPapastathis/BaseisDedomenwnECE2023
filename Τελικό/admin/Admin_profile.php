@@ -74,7 +74,7 @@
                                         }
                                     echo '</table><br>';
                                     echo '<a class="btn btn-primary" id="show-btn" href="update_profile.php">Click here to update your profile</a>';
-                                echo '</div>';//xrhsimo comment
+                                echo '</div>';
                             }
                         ?> <br>
                         <a type="button" href="./Admin.php">Go back</a>         
