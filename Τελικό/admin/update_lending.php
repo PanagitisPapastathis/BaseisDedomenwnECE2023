@@ -32,7 +32,7 @@
                         ini_set('display_startup_errors', 1);
                         error_reporting(E_ALL);
 
-                        include 'connection.php';
+                        include '../connection.php';
                         $conn = OpenCon();
 
                         // Get the username and isbn from the URL parameters
