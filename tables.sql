@@ -82,7 +82,7 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 	First_Name Varchar(30) not null,
 	Last_Name Varchar(30) not null,
 	Status Enum ('Student', 'Teacher', 'Admin', 'Central Admin', 'Suspended', 'Banned') not null,
-	Status2 Enum ('Pending', 'Accepted', 'Requesting'),
+	Status2 Enum ('Pending', 'Accepted', 'Requesting') default 'Pending',
 	Phone_number Integer not null,
 	Email Varchar(30) not null,
 	Books_Lended Integer not null default 0,
