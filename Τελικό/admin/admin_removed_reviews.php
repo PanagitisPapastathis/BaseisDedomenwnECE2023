@@ -40,7 +40,7 @@
                         error_reporting(E_ALL);
                         ini_set('display_errors', '1');
                         
-                        include '../connection.php';
+                        include '../connection.php';//apisteuta xrhsimo comment (sigoura den to vazw mono gia na allaksw to commit message)
                         $conn = OpenCon();
 
                         $query = "SELECT * FROM Accept_Reviews_Help WHERE Status='Removed'"; 
