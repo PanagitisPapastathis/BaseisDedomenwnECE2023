@@ -39,7 +39,7 @@
                         include '../connection.php';
                         $conn = OpenCon();
                         $srn = $_POST['srn'];
-                        $query = "UPDATE Reviews SET Status = 'Accepted' WHERE Serial_Number = $srn";
+                        $query = "UPDATE Reviews SET Status = 'Accepted' WHERE Serial_Number = $srn";//xrhsimo comment
                         
                         if(mysqli_query($conn, $query)){
                             echo '<h2>Review has been approved.</h2>';
