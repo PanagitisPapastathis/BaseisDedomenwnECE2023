@@ -71,7 +71,7 @@
                                             echo '<td>';
                                                 //fecho '<a type="button" href="./delete_student.php?id=' . $row[0]. '">';
                                                     //echo '<i class = "fa fa-trash"></i>';
-                                                //echo '</a>';
+                                                //echo  '</a>';
                                             echo '</td>';
                                         echo '</tr>';
                                     }
