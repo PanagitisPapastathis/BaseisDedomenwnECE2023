@@ -40,7 +40,7 @@
                         error_reporting(E_ALL);
                         ini_set('display_errors', '1');
                         
-                        include 'connection.php';
+                        include '../connection.php';
                         $conn = OpenCon();
                         $srn = $_POST['srn'];
                         $query = "SELECT * FROM Accept_Reviews_Help WHERE Serial_Number = $srn"; 
