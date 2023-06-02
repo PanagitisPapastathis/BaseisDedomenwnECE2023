@@ -43,10 +43,6 @@ create table if not exists Copies(
 		references School(Name)
 		on delete restrict
 		on update cascade,
-	constraint total_copies_non_negative
-		CHECK (No_of_copies >= 0),
-	constraint available_copies_non_negative
-		CHECK (Available_copies >= 0),
 	constraint available_less_than_total
 		CHECK (Available_copies <= No_of_copies)
 )
