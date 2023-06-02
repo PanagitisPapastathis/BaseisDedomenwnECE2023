@@ -40,7 +40,7 @@ JOIN Copies cp ON dsb.ISBN = cp.ISBN
 JOIN Lending ld ON cp.Copy_id = ld.Copy_id
 GROUP BY dsb.subject1, dsb.subject2
 ORDER BY No_of_Lendings DESC
-LIMIT 3;  ####################################### vgazei ena error sto query alla oxi sto view
+LIMIT 3; #trexei sto dbeaver alla oxi sto vscode
 
 #3.1.7
 SELECT a.Name AS AuthorName, COUNT(ba.ISBN) AS NumberOfBooks
