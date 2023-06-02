@@ -195,7 +195,7 @@ create table if not exists Lending (
 engine = InnoDB;
 
 create table if not exists Booking (
-	Making_date date not null default CURRENT_DATE,
+	Making_date date default CURRENT_DATE,
 	Username Varchar(30) not null,
 	Copy_id Integer not null,
 	Status enum('Pending', 'Active') default 'Pending', #na mpei trigger on insert na elegxei thn diathesimothta  
