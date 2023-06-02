@@ -7,13 +7,11 @@ GROUP BY usr.Username, usr.First_Name, usr.Last_Name, usr.Birth_Date
 ORDER BY Books_Lended DESC;
 
 #3.1.4 leitourgei alla den katalavainw apolyta ti kanei to left join
-SELECT auth.Name, COUNT(cp.ISBN) AS books_written FROM Author auth JOIN Book_Author ba
-ON auth.Author_id = ba.Author_id
-JOIN Books bk ON ba.ISBN = bk.ISBN
-JOIN Copies cp ON cp.ISBN = bk.ISBN
-LEFT JOIN Lending ld ON cp.Copy_id = ld.Copy_id WHERE ld.Copy_id IS NULL
-GROUP BY auth.Author_id
-ORDER BY books_written DESC;
+SELECT Author_id FROM Author WHERE Author_id NOT IN 
+    (SELECT DISTINCT Author.Author_id FROM Author
+    JOIN Book_Author ON Author.Author_id = Book_Author.Author_id
+    JOIN Copies ON Copies.ISBN = Book_Author.ISBN
+    JOIN Lending ON Copies.Copy_id = Lending.Copy_id);
 
 #3.1.5 to mono pou den exei testaristei einai auto
 CREATE VIEW IF NOT EXISTS Admin_Lendings_count AS
@@ -51,10 +49,3 @@ HAVING num_books >= (SELECT MAX(num_books) - 5 FROM (
     FROM Book_Author ba
     GROUP BY ba.Author_id) subquery)
 ORDER BY num_books DESC;
-
-#3.1.4 ksana
-SELECT DISTINCT Author.Name FROM Author
-LEFT JOIN Book_Author ON Author.Author_id = Book_Author.Author_id
-LEFT JOIN Lending ON Book_Author.ISBN = Lending.Copy_id
-WHERE Lending.Serial_number IS NULL;
-
