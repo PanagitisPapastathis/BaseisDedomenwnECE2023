@@ -1,12 +1,3 @@
-
-
-#3.1.?? ksexasa ti to hthela auto 
-SELECT sb.Subject_name, COUNT(r.Serial_Number) 
-FROM Subject AS sb 
-JOIN Book_Subject AS bs ON sb.Subject_id = bs.Subject_id
-JOIN Reviews AS r ON bs.ISBN = r.ISBN
-GROUP BY sb.Subject_name;
-
 #3.1.3
 SELECT usr.Username, usr.First_Name, usr.Last_Name, Count(lnd.Serial_number) AS Books_Lended, usr.Birth_Date
 FROM Users AS usr 
@@ -15,12 +6,14 @@ WHERE usr.Birth_Date <= CURRENT_DATE - INTERVAL 40 YEAR
 GROUP BY usr.Username, usr.First_Name, usr.Last_Name, usr.Birth_Date
 ORDER BY Books_Lended DESC;
 
-#3.1.4 DEN LEITOURGEI AKOMA
-SELECT auth.Name, auth.Author_id FROM Author auth JOIN Book_Author ba
+#3.1.4 leitourgei alla den katalavainw apolyta ti kanei to left join
+SELECT auth.Name, COUNT(cp.ISBN) AS books_written FROM Author auth JOIN Book_Author ba
 ON auth.Author_id = ba.Author_id
 JOIN Books bk ON ba.ISBN = bk.ISBN
 JOIN Copies cp ON cp.ISBN = bk.ISBN
-LEFT JOIN Lending l ON cp.Copy_id = ld.Copy_id;
+LEFT JOIN Lending ld ON cp.Copy_id = ld.Copy_id WHERE ld.Copy_id IS NULL
+GROUP BY auth.Author_id
+ORDER BY books_written DESC;
 
 #3.1.5
 CREATE VIEW IF NOT EXISTS Admin_Lendings_count AS
