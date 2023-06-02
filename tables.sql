@@ -2,7 +2,7 @@ create table if not exists School (
 	Name varchar(50) not null,
 	Address varchar(30) not null,
 	Postal_code int not null,
-	City varchar(30) not null,
+	City varchar(30) not null, #pithanws na prepei na ginei varchar?
 	Phone_number varchar(15) not null,
 	Email varchar(30) not null,
 	Headmaster_name varchar(50) not null,
