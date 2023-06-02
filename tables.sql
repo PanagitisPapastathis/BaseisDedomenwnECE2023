@@ -85,7 +85,7 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 	Last_Name Varchar(30) not null,
 	Status Enum ('Student', 'Teacher', 'Admin', 'Central Admin') not null,
 	Status2 Enum ('Pending', 'Accepted', 'Requesting','Suspended') default 'Pending',
-	Phone_number Integer not null,
+	Phone_number Varchar(15) not null,
 	Email Varchar(30) not null,
 	School_Name Varchar(30) not null,
 	Registration_Date timestamp default CURRENT_TIMESTAMP,
@@ -147,15 +147,14 @@ create table if not exists Book_Subject(
 )
 engine = InnoDB;
 
-create table if not exists Reviews (
-	Serial_Number Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+create table if not exists Reviews (#dikia mas paradoxh: o kathe xrhsths mporei na kanei apo ena review se kathe vivlio
 	Review longtext not null,
 	Username Varchar(30) not null,
 	Post_Date timestamp default CURRENT_TIMESTAMP,
 	Last_Update timestamp default CURRENT_TIMESTAMP,
 	ISBN Varchar(30),
 	Status ENUM ('Pending', 'Accepted','Removed'), #otan to svhnei o idios o xrhsthss na to kanoume delete apo th vash
-	primary key(Serial_number),
+	primary key(Username, ISBN),
 	constraint fk_Username_rev
 		foreign key (Username) 
 		references Users (Username)
@@ -191,12 +190,11 @@ create table if not exists Lending (
 engine = InnoDB;
 
 create table if not exists Booking (
-	Serial_number Integer AUTO_INCREMENT not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Making_date date not null default CURRENT_DATE,
 	Username Varchar(30) not null,
 	Copy_id Integer not null,
 	Status enum('Pending', 'Active') default 'Pending', #na mpei trigger on insert na elegxei thn diathesimothta  
-	primary key(Serial_number, Copy_id),
+	primary key(Username, Copy_id),
 	constraint fk_Booking_User
 	      foreign key (Username)
 	      references Users (Username)
