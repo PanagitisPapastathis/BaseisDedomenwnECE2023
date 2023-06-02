@@ -15,7 +15,7 @@ WHERE usr.Birth_Date <= CURRENT_DATE - INTERVAL 40 YEAR
 GROUP BY usr.Username, usr.First_Name, usr.Last_Name, usr.Birth_Date
 ORDER BY Books_Lended DESC;
 
-#3.1.3 DEN LEITOURGEI AKOMA
+#3.1.4 DEN LEITOURGEI AKOMA
 SELECT auth.Name, auth.Author_id FROM Author auth JOIN Book_Author ba
 ON auth.Author_id = ba.Author_id
 JOIN Books bk ON ba.ISBN = bk.ISBN
