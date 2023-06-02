@@ -28,7 +28,7 @@ engine = InnoDB;
 create table if not exists Copies(
 	Copy_id Integer Unsigned AUTO_INCREMENT,
 	ISBN Varchar(30) not null,
-	No_of_copies Integer Unsigned not null, #to default 1 mphke gia na mhn ginei kamia vlakeia sta inserts pou kanoume xeirokinhta alla tha to valoume required sthn php.
+	No_of_copies Integer Unsigned not null,
 	Available_copies Integer Unsigned, #trigger on insert na ginei iso me to number of copies
 	School_Name Varchar(50) not null,
 	primary key (Copy_id),  #gia eukolia sta updates
