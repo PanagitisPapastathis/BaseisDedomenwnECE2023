@@ -1,23 +1,23 @@
 create table if not exists School (
-	Name varchar(50) not null,
-	Address varchar(30) not null,
-	Postal_code int not null,
-	City varchar(30) not null, #pithanws na prepei na ginei varchar?
-	Phone_number varchar(15) not null,
-	Email varchar(30) not null,
-	Headmaster_name varchar(50) not null,
+	Name Varchar(50) not null,
+	Address Varchar(30) not null,
+	Postal_code Varchar(10) not null,
+	City Varchar(30) not null, #pithanws na prepei na ginei Varchar?
+	Phone_number Varchar(15) not null,
+	Email Varchar(60) not null,
+	Headmaster_name Varchar(50) not null,
 	#to admin name svhsthke
 	primary key (Name)
 )
 engine = InnoDB;
 
 create table if not exists Books (
-	ISBN varchar(30) not null,
-	Title varchar(100) not null,
+	ISBN Varchar(30) not null,
+	Title Varchar(100) not null,
 	Summary text not null,
-	No_pages integer not null,
+	No_pages Integer Unsigned not null,
 	Image text not null,
-	Book_language varchar(30) not null,
+	Book_language Varchar(30) not null,
 	Key_words text not null,
 	primary key(ISBN)
 )
@@ -26,11 +26,11 @@ engine = InnoDB;
 #sta books na valoume index gia to isbn
 
 create table if not exists Copies(
-	Copy_id Integer AUTO_INCREMENT,
-	ISBN varchar(30) not null,
-	No_of_copies Integer not null, #to default 1 mphke gia na mhn ginei kamia vlakeia sta inserts pou kanoume xeirokinhta alla tha to valoume required sthn php.
-	Available_copies Integer, #trigger on insert na ginei iso me to number of copies
-	School_Name varchar(50) not null,
+	Copy_id Integer Unsigned AUTO_INCREMENT,
+	ISBN Varchar(30) not null,
+	No_of_copies Integer Unsigned not null, #to default 1 mphke gia na mhn ginei kamia vlakeia sta inserts pou kanoume xeirokinhta alla tha to valoume required sthn php.
+	Available_copies Integer Unsigned, #trigger on insert na ginei iso me to number of copies
+	School_Name Varchar(50) not null,
 	primary key (Copy_id),  #gia eukolia sta updates
 	unique(ISBN, School_Name),
 	constraint fk_copies_isbn
@@ -55,15 +55,15 @@ engine = InnoDB; #na ftiaxtei ena trigger gia otan ginetai insert an yparxei hdh
 #ALTER TABLE Copies na mpainei apo default  to available  copies otan ginetai insert
 
 create table if not exists Publisher(
-	Publisher_id Integer AUTO_INCREMENT,
-	Name varchar(30) not null,
+	Publisher_id Integer Unsigned AUTO_INCREMENT,
+	Name Varchar(30) not null,
 	primary key(Publisher_id)
 )
 engine = InnoDB;
 
 create table if not exists Book_Publisher(
-	Publisher_id Integer not null,
-	ISBN varchar(30) not null,
+	Publisher_id Integer Unsigned not null,
+	ISBN Varchar(30) not null,
 	primary key (ISBN, Publisher_id),
 	constraint fk_Publisher_id
 		foreign key (Publisher_id)
@@ -88,7 +88,7 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 	Status Enum ('Student', 'Teacher', 'Admin', 'Central Admin') not null,
 	Status2 Enum ('Pending', 'Accepted', 'Requesting','Suspended') default 'Pending',
 	Phone_number Varchar(15) not null, #Legit_Phone_Number() san function sthn php
-	Email Varchar(30) not null,
+	Email Varchar(60) not null,
 	School_Name Varchar(30) not null,
 	Registration_Date timestamp default CURRENT_TIMESTAMP,
 	Last_Update timestamp default CURRENT_TIMESTAMP,
@@ -102,15 +102,15 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 engine = InnoDB;
 
 create table if not exists Author(
-	Author_id Integer AUTO_INCREMENT,
-	Name varchar(30) not null,
+	Author_id Integer Unsigned AUTO_INCREMENT,
+	Name Varchar(30) not null,
 	primary key(Author_id)
 )
 engine = InnoDB;
 
 create table if not exists Book_Author(
-	Author_id Integer not null, 
-	ISBN varchar(30) not null,
+	Author_id Integer Unsigned not null, 
+	ISBN Varchar(30) not null,
 	primary key (ISBN,Author_id), # !!!!!!!!!!!!!!!!!!!!!!
 	constraint fk_Author_id
 		foreign key (Author_id)
@@ -126,15 +126,15 @@ create table if not exists Book_Author(
 engine = InnoDB;
 
 create table if not exists Subject(
-	Subject_id Integer AUTO_INCREMENT, # pali ligo apsyxologhto
-	Subject_name varchar(30) not null,
+	Subject_id Integer Unsigned AUTO_INCREMENT, # pali ligo apsyxologhto
+	Subject_name Varchar(30) not null,
 	primary key(Subject_id)
 )
 engine = InnoDB;
 
 create table if not exists Book_Subject(
-	Subject_id INTEGER not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
-	ISBN varchar(30) not null,
+	Subject_id Integer Unsigned not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	ISBN Varchar(30) not null,
 	primary key (ISBN,Subject_id),
 	constraint fk_Subject_id	
 		foreign key (Subject_id)
@@ -151,7 +151,7 @@ engine = InnoDB;
 
 create table if not exists Reviews (#dikia mas paradoxh: o kathe xrhsths mporei na kanei apo ena review se kathe vivlio
 	Review longtext not null,
-	Rating Integer not null, ################################################ TO XAME KSEXASEI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Rating Integer Unsigned not null, ################################################ TO XAME KSEXASEI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Username Varchar(30) not null,
 	Post_Date timestamp default CURRENT_TIMESTAMP,
 	Last_Update timestamp default CURRENT_TIMESTAMP,
@@ -174,12 +174,12 @@ create table if not exists Reviews (#dikia mas paradoxh: o kathe xrhsths mporei 
 engine = InnoDB;
 
 create table if not exists Lending (
-	Serial_number Integer AUTO_INCREMENT,
+	Serial_number Integer Unsigned AUTO_INCREMENT,
 	Making_date date not null default CURRENT_DATE,
 	Username Varchar(30) not null,
 	Return_status ENUM('Owed', 'Returned') default 'Owed',
 	Return_date date,
-	Copy_id Integer not null,
+	Copy_id Integer Unsigned not null,
 	primary key(Serial_number),
 	constraint fk_Lending_User
 		foreign key (Username)
@@ -197,7 +197,7 @@ engine = InnoDB;
 create table if not exists Booking (
 	Making_date date default CURRENT_DATE,
 	Username Varchar(30) not null,
-	Copy_id Integer not null,
+	Copy_id Integer Unsigned not null,
 	Status enum('Pending', 'Active') default 'Pending', #na mpei trigger on insert na elegxei thn diathesimothta  
 	primary key(Username, Copy_id),
 	constraint fk_Booking_User
@@ -211,4 +211,4 @@ create table if not exists Booking (
 		on delete cascade
 		on update cascade
 )
-engine = InnoDB; #otan kapoios trwei suspend na svhnetai h krathsh
+engine = InnoDB;
