@@ -26,29 +26,29 @@ engine = InnoDB;
 #sta books na valoume index gia to isbn
 
 create table if not exists Copies(
-  Copy_id Integer AUTO_INCREMENT,
-  ISBN varchar(30) not null,
-  No_of_copies Integer not null, #to default 1 mphke gia na mhn ginei kamia vlakeia sta inserts pou kanoume xeirokinhta alla tha to valoume required sthn php.
-  Available_copies Integer, #trigger on insert na ginei iso me to number of copies
-  School_Name varchar(50) not null,
-  primary key (Copy_id),  #gia eukolia sta updates
-  unique(ISBN, School_Name),
-  constraint fk_copies_isbn
-    foreign key (ISBN)
-    references Books (ISBN)
-    on delete restrict
-    on update cascade,
-  constraint fk_copies_school_name
-    foreign key(School_Name)
-    references School(Name)
-    on delete restrict
-    on update cascade,
-  constraint total_copies_non_negative
-    CHECK (No_of_copies >= 0),
-  constraint available_copies_non_negative
-    CHECK (Available_copies >= 0),
-  constraint available_less_than_total
-    CHECK (Available_copies <= No_of_copies)
+	Copy_id Integer AUTO_INCREMENT,
+	ISBN varchar(30) not null,
+	No_of_copies Integer not null, #to default 1 mphke gia na mhn ginei kamia vlakeia sta inserts pou kanoume xeirokinhta alla tha to valoume required sthn php.
+	Available_copies Integer, #trigger on insert na ginei iso me to number of copies
+	School_Name varchar(50) not null,
+	primary key (Copy_id),  #gia eukolia sta updates
+	unique(ISBN, School_Name),
+	constraint fk_copies_isbn
+		foreign key (ISBN)
+		references Books (ISBN)
+		on delete restrict
+		on update cascade,
+	constraint fk_copies_school_name
+		foreign key(School_Name)
+		references School(Name)
+		on delete restrict
+		on update cascade,
+	constraint total_copies_non_negative
+		CHECK (No_of_copies >= 0),
+	constraint available_copies_non_negative
+		CHECK (Available_copies >= 0),
+	constraint available_less_than_total
+		CHECK (Available_copies <= No_of_copies)
 )
 engine = InnoDB; #na ftiaxtei ena trigger gia otan ginetai insert an yparxei hdh apla na auksanetai
 
@@ -93,7 +93,7 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 	Registration_Date timestamp default CURRENT_TIMESTAMP,
 	Last_Update timestamp default CURRENT_TIMESTAMP,
 	primary key(Username),
-	CONSTRAINT fk_User_School
+	constraint fk_User_School
 		FOREIGN KEY (School_Name)
 		REFERENCES School (Name)
 		ON DELETE RESTRICT
@@ -151,7 +151,7 @@ engine = InnoDB;
 
 create table if not exists Reviews (#dikia mas paradoxh: o kathe xrhsths mporei na kanei apo ena review se kathe vivlio
 	Review longtext not null,
-	Rating Integer, ################################################ TO XAME KSEXASEI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Rating Integer not null, ################################################ TO XAME KSEXASEI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Username Varchar(30) not null,
 	Post_Date timestamp default CURRENT_TIMESTAMP,
 	Last_Update timestamp default CURRENT_TIMESTAMP,
@@ -169,7 +169,7 @@ create table if not exists Reviews (#dikia mas paradoxh: o kathe xrhsths mporei 
 		on delete restrict
 		on update cascade,
 	constraint rating_in_likert_scale
-	  CHECK (Rating >= 1 AND Rating<=5)
+		CHECK (Rating >= 1 AND Rating<=5)
 )
 engine = InnoDB;
 
@@ -182,15 +182,15 @@ create table if not exists Lending (
 	Copy_id Integer not null,
 	primary key(Serial_number),
 	constraint fk_Lending_User
-	      foreign key (Username)
-	      references Users (Username)
-	      on delete restrict
-		  on update cascade,
+		foreign key (Username)
+		references Users (Username)
+		on delete restrict
+		on update cascade,
 	constraint fk_Lending_Copy_Id
-	      foreign key (Copy_id)
-	      references Copies(Copy_id)
-	      on delete restrict # restrict omws mono ama xrwstaei alliws apla menei opws einai xwris na diagrafetai
-		  on update cascade
+		foreign key (Copy_id)
+		references Copies(Copy_id)
+		on delete restrict # restrict omws mono ama xrwstaei alliws apla menei opws einai xwris na diagrafetai
+		on update cascade
 )
 engine = InnoDB;
 
@@ -201,14 +201,14 @@ create table if not exists Booking (
 	Status enum('Pending', 'Active') default 'Pending', #na mpei trigger on insert na elegxei thn diathesimothta  
 	primary key(Username, Copy_id),
 	constraint fk_Booking_User
-	      foreign key (Username)
-	      references Users (Username)
-	    on delete cascade
-		  on update cascade,
+		foreign key (Username)
+		references Users (Username)
+		on delete cascade
+		on update cascade,
 	constraint fk_Booking_Copy_id
-	      foreign key (Copy_id)
-	      references Copies(Copy_id)
-		  on delete cascade
-		  on update cascade
+		foreign key (Copy_id)
+		references Copies(Copy_id)
+		on delete cascade
+		on update cascade
 )
 engine = InnoDB; #otan kapoios trwei suspend na svhnetai h krathsh
