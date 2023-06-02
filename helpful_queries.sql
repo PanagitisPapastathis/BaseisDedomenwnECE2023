@@ -26,7 +26,7 @@ SELECT adm1.Username AS adm1_Username, adm2.Username AS adm2_Username, adm1.No_o
 FROM Admin_Lendings_count AS adm1 JOIN Admin_Lendings_count AS adm2
 ON adm1.No_of_Lendings = adm2.No_of_Lendings AND adm1.Username < adm2.Username;
 
-#3.1.6
+#3.1.6 mallon kati den paei poly kala se auto 🤔🤔🤔🤔🤔
 CREATE VIEW IF NOT EXISTS Dual_Subject_Books AS
 SELECT bs1.ISBN, s1.Subject_name as subject1, s2.Subject_name as subject2 
 FROM Book_Subject bs1 
