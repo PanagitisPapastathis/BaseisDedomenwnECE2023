@@ -43,7 +43,7 @@ ORDER BY No_of_Lendings DESC
 LIMIT 3; #trexei sto dbeaver alla oxi sto vscode
 
 #3.1.7
-SELECT a.Name, COUNT(ba.ISBN) AS num_books FROM Author aJOIN Book_Author ba
+SELECT a.Name, COUNT(ba.ISBN) AS num_books FROM Author a JOIN Book_Author ba
 ON a.Author_id = ba.Author_id
 GROUP BY a.Author_id
 HAVING num_books >= (SELECT MAX(num_books) - 5 FROM (
