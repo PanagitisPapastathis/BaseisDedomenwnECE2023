@@ -15,7 +15,7 @@ LEFT JOIN Lending ld ON cp.Copy_id = ld.Copy_id WHERE ld.Copy_id IS NULL
 GROUP BY auth.Author_id
 ORDER BY books_written DESC;
 
-#3.1.5
+#3.1.5 to mono pou den exei testaristei einai auto
 CREATE VIEW IF NOT EXISTS Admin_Lendings_count AS
 SELECT User.Username, COUNT(Lending.Serial_number) AS No_of_Lendings
 FROM Users JOIN Lending ON Users.Username = Lending.Approved_by
@@ -43,7 +43,11 @@ ORDER BY No_of_Lendings DESC
 LIMIT 3; #trexei sto dbeaver alla oxi sto vscode
 
 #3.1.7
-SELECT a.Name AS AuthorName, COUNT(ba.ISBN) AS NumberOfBooks
-FROM Author a
-JOIN Book_Author ba ON a.Author_id = ba.Author_id
-GROUP BY a.Name;
+SELECT a.Name, COUNT(ba.ISBN) AS num_books FROM Author aJOIN Book_Author ba
+ON a.Author_id = ba.Author_id
+GROUP BY a.Author_id
+HAVING num_books >= (SELECT MAX(num_books) - 5 FROM (
+    SELECT COUNT(ba.ISBN) AS num_books
+    FROM Book_Author ba
+    GROUP BY ba.Author_id) subquery)
+ORDER BY num_books DESC;
