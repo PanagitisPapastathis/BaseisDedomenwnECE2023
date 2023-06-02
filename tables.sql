@@ -175,7 +175,8 @@ create table if not exists Lending (
 	Username Varchar(30) not null,
 	Return_status ENUM('Owed', 'Returned') default 'Owed',
 	Return_date date,
-	Copy_id Integer Unsigned not null,
+	Copy_id Integer Unsigned not null,\
+	Approved_by Varchar(30),
 	primary key(Serial_number),
 	constraint fk_Lending_User
 		foreign key (Username)
@@ -186,6 +187,11 @@ create table if not exists Lending (
 		foreign key (Copy_id)
 		references Copies(Copy_id)
 		on delete restrict # restrict omws mono ama xrwstaei alliws apla menei opws einai xwris na diagrafetai
+		on update cascade,
+	constraint fk_Lending_Approved_by
+		foreign key (Approved_by)
+		references Users (Username)
+		on delete restrict
 		on update cascade
 )
 engine = InnoDB;
