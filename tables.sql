@@ -6,7 +6,7 @@ create table if not exists School (
 	Phone_number varchar(15) not null,
 	Email varchar(30) not null,
 	Headmaster_name varchar(50) not null,
-	School_admin_name varchar(50) not null,
+	#to admin name svhsthke
 	primary key (Name)
 )
 engine = InnoDB;
@@ -23,15 +23,15 @@ create table if not exists Books (
 )
 engine = InnoDB;
 
-#sta books na valoume index gia ton titlo
+#sta books na valoume index gia to isbn
 
 create table if not exists Copies(
   Copy_id Integer AUTO_INCREMENT,
   ISBN varchar(30) not null,
-  No_of_copies int DEFAULT 1,
+  No_of_copies int DEFAULT 1, #to default 1 mphke gia na mhn ginei kamia vlakeia sta inserts
   School_Name varchar(50) not null,
-  Available_copies int DEFAULT 1,
   primary key (Copy_id), 
+  unique(ISBN, School_Name), #######################################################
   constraint fk_copies_isbn
     foreign key (ISBN)
     references Books (ISBN)
@@ -49,7 +49,9 @@ create table if not exists Copies(
   constraint available_less_than_total
     CHECK (Available_copies <= No_of_copies)
 )
-engine = InnoDB;
+engine = InnoDB; #na ftiaxtei ena trigger gia otan ginetai insert an yparxei hdh apla na auksanetai
+
+#ALTER TABLE Copies na mpainei apo default  to available  copies otan ginetai insert
 
 create table if not exists Publisher(
 	Publisher_id Integer AUTO_INCREMENT, # ligo apsyxologhto alla ok
@@ -59,7 +61,7 @@ create table if not exists Publisher(
 engine = InnoDB;
 
 create table if not exists Book_Publisher(
-	Publisher_id Integer null,
+	Publisher_id Integer not null,
 	ISBN varchar(30) not null,
 	primary key (ISBN, Publisher_id),
 	constraint fk_Publisher_id
@@ -81,12 +83,10 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 	Password Varchar(30) not null,
 	First_Name Varchar(30) not null,
 	Last_Name Varchar(30) not null,
-	Status Enum ('Student', 'Teacher', 'Admin', 'Central Admin', 'Suspended', 'Banned') not null,
-	Status2 Enum ('Pending', 'Accepted', 'Requesting') default 'Pending',
+	Status Enum ('Student', 'Teacher', 'Admin', 'Central Admin') not null,
+	Status2 Enum ('Pending', 'Accepted', 'Requesting','Suspended') default 'Pending',
 	Phone_number Integer not null,
 	Email Varchar(30) not null,
-	Books_Lended Integer not null default 0,
-	Books_Owed Integer not null default 0,
 	School_Name Varchar(30) not null,
 	Registration_Date timestamp default CURRENT_TIMESTAMP,
 	Last_Update timestamp default CURRENT_TIMESTAMP,
@@ -123,7 +123,6 @@ create table if not exists Book_Author(
 )
 engine = InnoDB;
 
-
 create table if not exists Subject(
 	Subject_id Integer AUTO_INCREMENT, # pali ligo apsyxologhto
 	Subject_name varchar(30) not null,
@@ -152,10 +151,10 @@ create table if not exists Reviews (
 	Serial_Number Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Review longtext not null,
 	Username Varchar(30) not null,
-	Post_Date timestamp,
-	Last_Update timestamp default CURRENT_TIMESTAMP, #gamw to spitaki mou
+	Post_Date timestamp default CURRENT_TIMESTAMP,
+	Last_Update timestamp default CURRENT_TIMESTAMP,
 	ISBN Varchar(30),
-	Status ENUM ('Pending', 'Accepted', 'Deleted', 'Removed'),
+	Status ENUM ('Pending', 'Accepted','Removed'), #otan to svhnei o idios o xrhsthss na to kanoume delete apo th vash
 	primary key(Serial_number),
 	constraint fk_Username_rev
 		foreign key (Username) 
@@ -171,11 +170,11 @@ create table if not exists Reviews (
 engine = InnoDB;
 
 create table if not exists Lending (
-	Serial_number Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
-	Making_date date not null default CURRENT_DATE, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! timestamp -> date
+	Serial_number Integer AUTO_INCREMENT,
+	Making_date date not null default CURRENT_DATE,
 	Username Varchar(30) not null,
 	Return_status ENUM('Owed', 'Returned') default 'Owed',
-	Return_date date, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Return_date date,
 	Copy_id Integer not null,
 	primary key(Serial_number),
 	constraint fk_Lending_User
@@ -196,12 +195,12 @@ create table if not exists Booking (
 	Making_date date not null default CURRENT_DATE,
 	Username Varchar(30) not null,
 	Copy_id Integer not null,
-	Status enum('Pending', 'Accepted', 'Aborted', 'Denied') default 'Pending',
+	Status enum('Pending', 'Active') default 'Pending', #na mpei trigger on insert na elegxei thn diathesimothta  
 	primary key(Serial_number, Copy_id),
 	constraint fk_Booking_User
 	      foreign key (Username)
 	      references Users (Username)
-	      on delete cascade
+	    on delete cascade
 		  on update cascade,
 	constraint fk_Booking_Copy_id
 	      foreign key (Copy_id)
@@ -209,4 +208,4 @@ create table if not exists Booking (
 		  on delete cascade
 		  on update cascade
 )
-engine = InnoDB;
+engine = InnoDB; #otan kapoios trwei suspend na svhnetai h krathsh
