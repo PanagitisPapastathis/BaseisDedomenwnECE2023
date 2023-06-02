@@ -51,3 +51,10 @@ HAVING num_books >= (SELECT MAX(num_books) - 5 FROM (
     FROM Book_Author ba
     GROUP BY ba.Author_id) subquery)
 ORDER BY num_books DESC;
+
+#3.1.4 ksana
+SELECT DISTINCT Author.Name FROM Author
+LEFT JOIN Book_Author ON Author.Author_id = Book_Author.Author_id
+LEFT JOIN Lending ON Book_Author.ISBN = Lending.Copy_id
+WHERE Lending.Serial_number IS NULL;
+
