@@ -28,10 +28,11 @@ engine = InnoDB;
 create table if not exists Copies(
   Copy_id Integer AUTO_INCREMENT,
   ISBN varchar(30) not null,
-  No_of_copies int DEFAULT 1, #to default 1 mphke gia na mhn ginei kamia vlakeia sta inserts
+  No_of_copies Integer not null, #to default 1 mphke gia na mhn ginei kamia vlakeia sta inserts pou kanoume xeirokinhta alla tha to valoume required sthn php.
+  Available_copies Integer, #trigger on insert na ginei iso me to number of copies
   School_Name varchar(50) not null,
-  primary key (Copy_id), 
-  unique(ISBN, School_Name), #######################################################
+  primary key (Copy_id),  #gia eukolia sta updates
+  unique(ISBN, School_Name),
   constraint fk_copies_isbn
     foreign key (ISBN)
     references Books (ISBN)
@@ -54,7 +55,7 @@ engine = InnoDB; #na ftiaxtei ena trigger gia otan ginetai insert an yparxei hdh
 #ALTER TABLE Copies na mpainei apo default  to available  copies otan ginetai insert
 
 create table if not exists Publisher(
-	Publisher_id Integer AUTO_INCREMENT, # ligo apsyxologhto alla ok
+	Publisher_id Integer AUTO_INCREMENT,
 	Name varchar(30) not null,
 	primary key(Publisher_id)
 )
@@ -83,9 +84,10 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 	Password Varchar(30) not null,
 	First_Name Varchar(30) not null,
 	Last_Name Varchar(30) not null,
+	Birth_Date date not null,
 	Status Enum ('Student', 'Teacher', 'Admin', 'Central Admin') not null,
 	Status2 Enum ('Pending', 'Accepted', 'Requesting','Suspended') default 'Pending',
-	Phone_number Varchar(15) not null,
+	Phone_number Varchar(15) not null, #Legit_Phone_Number() san function sthn php
 	Email Varchar(30) not null,
 	School_Name Varchar(30) not null,
 	Registration_Date timestamp default CURRENT_TIMESTAMP,
@@ -100,7 +102,7 @@ create table if not exists Users (#mallon oi users den tha prepei na mporoun na 
 engine = InnoDB;
 
 create table if not exists Author(
-	Author_id Integer AUTO_INCREMENT, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Author_id Integer AUTO_INCREMENT,
 	Name varchar(30) not null,
 	primary key(Author_id)
 )
@@ -149,6 +151,7 @@ engine = InnoDB;
 
 create table if not exists Reviews (#dikia mas paradoxh: o kathe xrhsths mporei na kanei apo ena review se kathe vivlio
 	Review longtext not null,
+	Rating Integer, ################################################ TO XAME KSEXASEI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Username Varchar(30) not null,
 	Post_Date timestamp default CURRENT_TIMESTAMP,
 	Last_Update timestamp default CURRENT_TIMESTAMP,
@@ -164,7 +167,9 @@ create table if not exists Reviews (#dikia mas paradoxh: o kathe xrhsths mporei 
 		foreign key (ISBN) 
 		references Books (ISBN)
 		on delete restrict
-		on update cascade
+		on update cascade,
+	constraint rating_in_likert_scale
+	  CHECK (Rating >= 1 AND Rating<=5)
 )
 engine = InnoDB;
 
