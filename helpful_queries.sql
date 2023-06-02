@@ -12,7 +12,7 @@ GROUP BY sb.Subject_name;
 CREATE VIEW IF NOT EXISTS Admin_Lendings_count AS
 SELECT User.Username, COUNT(Lending.Serial_number) AS No_of_Lendings
 FROM Users JOIN Lending ON Users.Username = Lending.Approved_by
-GROUP BY User.Username
+GROUP BY Users.Username
 HAVING No_of_Lendings>=22;
 
 SELECT adm1.Username AS adm1_Username, adm2.Username AS adm2_Username, adm1.No_of_Lendings
