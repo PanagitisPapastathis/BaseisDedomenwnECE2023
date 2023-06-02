@@ -50,7 +50,7 @@ create table if not exists Copies(
 	constraint available_less_than_total
 		CHECK (Available_copies <= No_of_copies)
 )
-engine = InnoDB; #na ftiaxtei ena trigger gia otan ginetai insert an yparxei hdh apla na auksanetai
+engine = InnoDB; #Na ftiaxtei ena trigger gia otan ginetai insert an yparxei hdh apla na auksanetai
 
 #ALTER TABLE Copies na mpainei apo default  to available  copies otan ginetai insert
 
