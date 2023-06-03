@@ -20,7 +20,7 @@
         <div id="navbar-div" class="container-fluid">
             <a class="navbar-brand" id="nav-bar-text">School Library - Central Admin Page</a>
             <a id="navbar-items" href="index.php"> 
-                <i class="fa fa-home "></i> Landing
+                <i class="fa fa-home "></i> Log out
             </a>
         </div>
     </nav>
@@ -60,6 +60,69 @@
                         <h4 class="card-title">Backup</h4>
                         <p class="card-text" id="paragraph">This should backup the whole database somehow.<br></p>
                         <a class="btn btn-primary" id="show-btn" href="./lended_so_far.php">Backup</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" id="card-container-layout">
+                    <div class="card-body" id="card">
+                        <h4 class="card-title">3.1.1 by year</h4>
+                        <p class="card-text" id="paragraph">This is returns a table of the lendings per school.<br></p>
+                        <a class="btn btn-primary" id="show-btn" href="./central_admin_3.1.1_by_year.php">Show</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" id="card-container-layout">
+                    <div class="card-body" id="card">
+                        <h4 class="card-title">3.1.1 by month</h4>
+                        <p class="card-text" id="paragraph">This is returns a table of the lendings per school.<br></p>
+                        <a class="btn btn-primary" id="show-btn" href="./central_admin_3.1.1_by_month.php">Show</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" id="card-container-layout">
+                    <div class="card-body" id="card">
+                        <h4 class="card-title">3.1.2 </h4>
+                        <p class="card-text" id="paragraph">This leads you to a page where by selecting a book subject you can see all the authors associated with this subject and all the teachers who have borrowed books of this particular subject.<br></p>
+                        <a class="btn btn-primary" id="show-btn" href="./central_admin_3.1.2.php">Show</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" id="card-container-layout">
+                    <div class="card-body" id="card">
+                        <h4 class="card-title">3.1.3 </h4>
+                        <p class="card-text" id="paragraph">This leads you to a page showing by descending order all the young teachers (younger than 40) who have borrowed at least a book.<br></p>
+                        <a class="btn btn-primary" id="show-btn" href="./central_admin_3.1.3.php">Show</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" id="card-container-layout">
+                    <div class="card-body" id="card">
+                        <h4 class="card-title">3.1.4 </h4>
+                        <p class="card-text" id="paragraph">This leads you to a page showing the authors whose books have never been lended.<br></p>
+                        <a class="btn btn-primary" id="show-btn" href="./central_admin_3.1.3.php">Show</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" id="card-container-layout">
+                    <div class="card-body" id="card">
+                        <h4 class="card-title">3.1.6 </h4>
+                        <p class="card-text" id="paragraph">This leads you to a page showing by descending order the three most popular binary subject relationships among book subjects.<br></p>
+                        <a class="btn btn-primary" id="show-btn" href="./central_admin_3.1.6.php">Show</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" id="card-container-layout">
+                    <div class="card-body" id="card">
+                        <h4 class="card-title">3.1.7 </h4>
+                        <p class="card-text" id="paragraph">This leads you to a page showing all the authors who have at maximum less than five bookw from the author with the most books.<br></p>
+                        <a class="btn btn-primary" id="show-btn" href="./central_admin_3.1.7.php">Show</a>
                     </div>
                 </div>
             </div>

@@ -23,11 +23,11 @@
         </div>
     </nav>
     <?php
-    include '../connection.php';
+    include 'connection.php';
     $conn=OpenCon();
     session_start();
     $name=$_GET['id'];
-    $q="select Name, Phone_number, Email, Headmaster_name, School_admin_name from School where Name='$name'";
+    $q="select Name, Phone_number, Email, Headmaster_name from School where Name='$name'";
     $result=mysqli_query($conn, $q);
     $row=mysqli_fetch_row($result);
 
@@ -48,9 +48,6 @@
                 <label for="new_headmaster_name">New Headmaster:</label>
                 <input type="text" name="new_headmaster_name" id="new_headmaster_name" placeholder="New Headmaster Name" value="<?php echo ''.$row[3].''?>" required>
                 <br> <br>
-                <label for="new_school_admin_name">New School Admin Name:</label>
-                <input type="text" name="new_school_admin_name" id="new_school_admin_name" placeholder="New School Admin Name" value="<?php echo ''.$row[4].''?>" required>
-                <br> <br>
                 <button type="submit">Done</button>
             </p>
         </form>
@@ -69,7 +66,8 @@
     $pnum= isset($_POST["new_phone_number"]) ? $_POST["new_phone_number"] : '';
     $email= isset($_POST["new_email"]) ? $_POST["new_email"] : '';
     $hname= isset($_POST["new_headmaster_name"]) ? $_POST["new_headmaster_name"] : '';
-    $saname= isset($_POST["new_school_admin_name"]) ? $_POST["new_school_admin_name"] : '';
+    //$fname= isset($_POST["new_school_admin_first_name"]) ? $_POST["new_school_admin_first_name"] : '';
+    //$lname= isset($_POST["new_school_admin_last_name"]) ? $_POST["new_school_admin_last_name"] : '';
     /*if (isset($_POST["new_phone_number"])){
         $_SESSION['new_phone_number']=$pnum;
         $_SESSION['new_email']=$email;
@@ -82,7 +80,8 @@
         }
     }
     else{
-        $query="update School set Phone_number='$pnum', Email='$email', Headmaster_Name='$hname', School_admin_name='$saname' where Name='$sname' ";
+        $query="update School set Phone_number='$pnum', Email='$email', Headmaster_Name='$hname' where Name='$sname' ";
+        //$query2="update Users set First_Name"
         if(mysqli_query($conn, $query)){
             //echo "Record updated successfully";
             header("Location: ./central_admin_view_schools.php");

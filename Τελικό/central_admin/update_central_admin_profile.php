@@ -46,7 +46,7 @@
         </form>
     </main>
     <?php
-    include '../connection.php';
+    include 'connection.php';
     $conn=OpenCon();
     session_start();
     $username=$_SESSION["username"];

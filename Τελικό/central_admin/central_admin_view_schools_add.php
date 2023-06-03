@@ -39,19 +39,16 @@
                 <label for="school_city">School City:</label>
                 <input type="text" name="school_city" id="school_city" placeholder="Enter school city" required>
                 <br> <br>
-                <label for="new_phone_number">New Phone Number:</label>
-                <input type="number" name="new_phone_number" id="new_phone_number" placeholder="0000000000" required>
+                <label for="new_phone_number">Phone Number:</label>
+                <input type="text" name="new_phone_number" id="new_phone_number" placeholder="0000000000" required>
                 <br> <br>
-                <label for="new_email">New Email:</label>
+                <label for="new_email">Email:</label>
                 <input type="text" name="new_email" id="new_email" placeholder="New Email" required>
                 <br> <br>
-                <label for="new_headmaster_name">New Headmaster:</label>
+                <label for="new_headmaster_name">Headmaster:</label>
                 <input type="text" name="new_headmaster_name" id="new_headmaster_name" placeholder="New Headmaster Name" required>
                 <br> <br>
-                <label for="new_school_admin_name">New School Admin Name:</label>
-                <input type="text" name="new_school_admin_name" id="new_school_admin_name" placeholder="New School Admin Name" required>
-                <br> <br>
-                <button type="submit">Done</button>
+                <button type="submit">Submit</button>
             </p>
         </form>
         <a href="./central_admin_view_schools.php">
@@ -60,7 +57,7 @@
         </div>
         <div class="form-group col-sm-3 mb-3">
         <?php
-        include '../connection.php';
+        include 'connection.php';
         $conn=OpenCon();
         session_start();
     //$name=$_GET['id'];
@@ -74,14 +71,14 @@
     $pnum= isset($_POST["new_phone_number"]) ? $_POST["new_phone_number"] : '';
     $email= isset($_POST["new_email"]) ? $_POST["new_email"] : '';
     $hname= isset($_POST["new_headmaster_name"]) ? $_POST["new_headmaster_name"] : '';
-    $saname= isset($_POST["new_school_admin_name"]) ? $_POST["new_school_admin_name"] : '';
+    //$saname= isset($_POST["new_school_admin_name"]) ? $_POST["new_school_admin_name"] : '';
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         if (isset($_POST["new_email"])){
             echo '<hr>Invalid email format, please try again';
         }
     }
     else{
-        $query="insert into School (Name, Address, Postal_code, City, Phone_number, Email, Headmaster_name, School_admin_name) values ('$sname', '$addr', '$pc', '$city', '$pnum', '$email', '$hname', '$saname')";
+        $query="insert into School (Name, Address, Postal_code, City, Phone_number, Email, Headmaster_name) values ('$sname', '$addr', '$pc', '$city', '$pnum', '$email', '$hname')";
         if(mysqli_query($conn, $query)){
             //echo "Record added successfully";
             header("Location: ./central_admin_view_schools.php");

@@ -31,7 +31,7 @@
                 <div class="card" id="card-container">
                     <div class="card-body" id="card">
                         <?php
-                            include '../connection.php';//
+                            include 'connection.php';
                             $conn = OpenCon();
                             session_start();
                             $username = $_SESSION["username"];
@@ -54,8 +54,8 @@
                                                 echo '<th>Phone Number</th>';
                                                 echo '<th>School Name</th>';
                                                 echo '<th>Registration Date</th>';
-                                                echo '<th>Books Lended</th>';
-                                                echo '<th>Books Owed</th>';
+                                                //echo '<th>Books Lended</th>';
+                                                //echo '<th>Books Owed</th>';
                                                 echo '<th></th>';
                                                 echo '<th></th>';
                                             echo '</tr>';
@@ -66,12 +66,12 @@
                                                 echo '<td>' . $row[2] . '</td>';
                                                 echo '<td>' . $row[3] . '</td>';
                                                 echo '<td>' . $row[0] . '</td>';
-                                                echo '<td>' . $row[6] . '</td>';
-                                                echo '<td>' . $row[5] . '</td>';
+                                                echo '<td>' . $row[8] . '</td>';
+                                                echo '<td>' . $row[7] . '</td>';
                                                 echo '<td>' . $row[9] . '</td>';
                                                 echo '<td>' . $row[10] . '</td>';
-                                                echo '<td>' . $row[7] . '</td>';
-                                                echo '<td>' . $row[8] . '</td>';
+                                                //echo '<td>' . $row[7] . '</td>';
+                                                //echo '<td>' . $row[8] . '</td>';
                                             echo '</tr>';
                                         }
                                         echo '</tbody>';

@@ -6,7 +6,7 @@
 </head>
 <body>
     <?php
-    include '../connection.php';
+    include 'connection.php';
     $conn=OpenCon();
     $username=$_GET['id'];
     $query="update Users set Status2='Accepted', Status='Admin' where username='$username'";
