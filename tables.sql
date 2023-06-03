@@ -200,6 +200,23 @@ DELIMITER ;
 
 DELIMITER //
 
+CREATE TRIGGER IF NOT EXISTS trg_lending_approved_by
+BEFORE INSERT ON Lending
+FOR EACH ROW
+BEGIN
+  IF SELECT 1 FROM Users WHERE Username = NEW.Username AND Status = 'Student'
+    DECLARE school_admin VARCHAR(30);
+    SELECT Username INTO school_admin FROM Users WHERE Status = 'Admin'
+    AND School_Name = (SELECT School_Name FROM Users WHERE Username = NEW.Username);
+    SET NEW.Approved_by = school_admin;
+  END IF;
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
 #SET GLOBAL event_scheduler = ON;
 
 CREATE EVENT IF NOT EXISTS delete_expired_bookings
