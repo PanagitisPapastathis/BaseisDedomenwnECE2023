@@ -214,6 +214,16 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_set_available_copies 
+BEFORE INSERT ON Copies
+FOR EACH ROW
+BEGIN
+	SET NEW.Available_copies = NEW.No_of_copies;
+END//
+
+DELIMITER ;
 
 DELIMITER //
 
