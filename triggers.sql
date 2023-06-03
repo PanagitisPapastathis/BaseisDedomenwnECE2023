@@ -185,6 +185,38 @@ DELIMITER ;
 
 DELIMITER //
 
+CREATE TRIGGER IF NOT EXISTS trg_review_status 
+BEFORE INSERT ON Reviews
+FOR EACH ROW
+BEGIN
+  DECLARE usrstatus varchar(10);
+  SELECT Status INTO usrstatus FROM Users WHERE Username = NEW.Username ;
+	IF NOT usrstatus = 'Student' THEN
+		SET NEW.Status = 'Accepted';
+	END IF;
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_lending_approved_by
+BEFORE INSERT ON Lending
+FOR EACH ROW
+BEGIN
+  DECLARE school_admin VARCHAR(30);
+  IF (SELECT COUNT(*) FROM Users WHERE Username = NEW.Username AND Status = 'Student') > 0 THEN
+    SELECT Username INTO school_admin FROM Users WHERE Status = 'Admin'
+    AND School_Name = (SELECT School_Name FROM Users WHERE Username = NEW.Username);
+    SET NEW.Approved_by = school_admin;
+  END IF;
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
 #SET GLOBAL event_scheduler = ON;
 
 CREATE EVENT IF NOT EXISTS delete_expired_bookings
@@ -195,4 +227,3 @@ BEGIN
     DELETE FROM Booking
     WHERE Making_date <= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY);
 END
-
