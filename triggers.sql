@@ -1,4 +1,17 @@
 
+DROP TRIGGER IF EXISTS trg_Lending_Insert;
+DROP TRIGGER IF EXISTS trg_Lending_With_Overdue_Lending;
+DROP TRIGGER IF EXISTS trg_Booking_With_Overdue_Lending;
+DROP TRIGGER IF EXISTS trg_Lending_with_pending_booking;
+DROP TRIGGER IF EXISTS trg_Copies_Lendings;
+DROP TRIGGER IF EXISTS trg_Copies_Bookings;
+DROP TRIGGER IF EXISTS trg_Users_Status_Updates;
+DROP TRIGGER IF EXISTS trg_User_Deletions;
+DROP TRIGGER IF EXISTS trg_Last_Update_Reviews;
+DROP TRIGGER IF EXISTS trg_User_suspended_or_banned;
+DROP TRIGGER IF EXISTS trg_set_available_copies;
+
+
 DELIMITER //
 
 CREATE TRIGGER if not exists trg_Lending_Insert
@@ -30,9 +43,9 @@ BEFORE INSERT ON Lending
 FOR EACH ROW
 BEGIN
   IF (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username
-    AND Making_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)) > 0 THEN
+    AND Making_date <= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) AND Status='Owed') > 0 THEN
     SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'User has an overdue lending.';
+		SET MESSAGE_TEXT = 'Cannot add lending: user has an overdue lending.';
   END IF;
 END //
 
@@ -45,22 +58,21 @@ BEFORE INSERT ON Booking
 FOR EACH ROW
 BEGIN
   IF (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username
-    AND Making_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) AND Status='Owed') > 0 THEN
+    AND Making_date <= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) AND Status='Act') > 0 THEN
     SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'User has an overdue lending.';
+		SET MESSAGE_TEXT = 'Cannot add booking: user has an overdue lending.';
   END IF;
 END //
 
 DELIMITER ;
 
+
 DELIMITER // 
-CREATE TRIGGER IF NOT EXISTS trg_Booking_to_Lending
-AFTER UPDATE ON Booking
+CREATE TRIGGER IF NOT EXISTS trg_Lending_with_pending_booking
+BEFORE INSERT ON Lending
 FOR EACH ROW
 BEGIN
-    IF NEW.Status = 'Active' AND OLD.Status = 'Pending' THEN
-        INSERT INTO Lending (Making_date, Username, Copy_id, Return_status) VALUES (CURRENT_DATE, NEW.Username, NEW.Copy_id, 'Owed');
-    END IF;
+	DELETE FROM Booking WHERE Username = NEW.Username AND Copy_id = New.Copy_id;
 END //
 DELIMITER ;
 
