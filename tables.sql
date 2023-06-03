@@ -200,7 +200,7 @@ create table if not exists Booking (
 	Making_date date default CURRENT_DATE,
 	Username Varchar(30) not null,
 	Copy_id Integer Unsigned not null,
-	Status enum('Pending', 'Active') default 'Pending', #na mpei trigger on insert na elegxei thn diathesimothta  
+	Status enum('Pending', 'Active') default 'Pending', #na mpei trigger on insert na elegxei thn diathesimothta -> akyro, tha petaksei error logw tou unsigned
 	primary key(Username, Copy_id),
 	constraint fk_Booking_User
 		foreign key (Username)
