@@ -15,7 +15,7 @@ BEGIN
 
 	IF lending_count >= 2 THEN
 		SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'Maximum number of lendings reached for this user in one week.';
+		SET MESSAGE_TEXT = 'Maximum number of lendings reached for this user in one week for this user.';
 	ELSE
 	  UPDATE Users
 	     SET Books_Lended = Books_Lended + 1
@@ -62,8 +62,8 @@ AFTER UPDATE ON Booking
 FOR EACH ROW
 BEGIN
     IF NEW.Status = 'Accepted' AND OLD.Status = 'Pending' THEN
-        INSERT INTO Lending (Username, ISBN)
-        VALUES (NEW.Username, NEW.ISBN);
+        INSERT INTO Lending (Username, Copy_id) VALUES (NEW.Username, NEW.Copy_id);
+        DELETE FROM Booking WHERE Username = NEW.Username AND Copy_id = New.Copy_id;
     END IF;
 END //
 
@@ -74,14 +74,7 @@ CREATE TRIGGER IF NOT EXISTS trg_Copies_Lendings
 BEFORE INSERT ON Lending
 FOR EACH ROW
 BEGIN
-    DECLARE scl varchar(30);
-    DECLARE isbnnn varchar(30);
-
-    SELECT School_Name INTO scl FROM Users Where Username = NEW.Username;
-    SET isbnnn = NEW.ISBN;
-    
-    IF (SELECT Available_copies FROM Copies WHERE School_Name=Scl
-      AND ISBN=isbnnn) > 0 THEN
+    IF (SELECT Available_copies FROM Copies WHERE Copy_id = NEW.Copy_id) > 0 THEN
       UPDATE Copies SET Available_copies = Available_copies -1
       WHERE School_Name=Scl AND ISBN=isbnnn;
     ELSE 
@@ -97,12 +90,8 @@ FOR EACH ROW
 BEGIN
     DECLARE scl varchar(30);
     DECLARE isbnnn varchar(30);
-
-    SELECT School_Name INTO scl FROM Users Where Username = NEW.Username;
-    SET isbnnn = NEW.ISBN;
     
-    IF (SELECT Available_copies FROM Copies WHERE School_Name=Scl
-      AND ISBN=isbnnn) > 0 THEN
+    IF (SELECT Available_copies FROM Copies WHERE Copy_id = NEW.Copy_id) > 0 THEN
       UPDATE Copies SET Available_copies = Available_copies -1
       WHERE School_Name=Scl AND ISBN=isbnnn;
     ELSE 
@@ -183,15 +172,12 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER IF NOT EXISTS trg_User_suspended_or_banned
+CREATE TRIGGER IF NOT EXISTS trg_User_suspended_or_banned ################################### PITHANWS AXRHSTO
 BEFORE UPDATE ON Users
 FOR EACH ROW
 BEGIN
-	IF NEW.Status = 'Suspended' THEN
-		UPDATE Reviews SET Status = 'Pending' WHERE Username = OLD.Username;
-	END IF;
-	IF NEW.Status = 'Banned' THEN
-		DUPDATE Reviews SET Status = 'Removed' WHERE Username = OLD.Username;
+	IF NEW.Status2 = 'Suspended' THEN
+		UPDATE Reviews SET Status = 'Removed' WHERE Username = OLD.Username;
 	END IF;
 END//
 
@@ -199,15 +185,14 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER delete_expired_bookings
-AFTER INSERT ON Booking
-FOR EACH ROW
-BEGIN
-    DECLARE expired_date DATE;
-    SET expired_date = DATE_SUB(NEW.Making_date, INTERVAL 1 WEEK);
-    
-    DELETE FROM Booking
-    WHERE Making_date <= expired_date;
-END //
+#SET GLOBAL event_scheduler = ON;
 
-DELIMITER;
+CREATE EVENT IF NOT EXISTS delete_expired_bookings
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_DATE
+DO 
+BEGIN
+    DELETE FROM Booking
+    WHERE Making_date <= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY);
+END
+
