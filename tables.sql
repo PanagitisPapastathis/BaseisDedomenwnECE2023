@@ -204,8 +204,8 @@ CREATE TRIGGER IF NOT EXISTS trg_lending_approved_by
 BEFORE INSERT ON Lending
 FOR EACH ROW
 BEGIN
-  IF SELECT 1 FROM Users WHERE Username = NEW.Username AND Status = 'Student'
-    DECLARE school_admin VARCHAR(30);
+  DECLARE school_admin VARCHAR(30);
+  IF (SELECT COUNT(*) FROM Users WHERE Username = NEW.Username AND Status = 'Student') > 0 THEN
     SELECT Username INTO school_admin FROM Users WHERE Status = 'Admin'
     AND School_Name = (SELECT School_Name FROM Users WHERE Username = NEW.Username);
     SET NEW.Approved_by = school_admin;
@@ -227,4 +227,3 @@ BEGIN
     DELETE FROM Booking
     WHERE Making_date <= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY);
 END
-
