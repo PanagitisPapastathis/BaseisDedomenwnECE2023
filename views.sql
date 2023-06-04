@@ -11,7 +11,9 @@ DROP VIEW IF EXISTS Lending_Help;
 DROP VIEW IF EXISTS Lending_Help2;
 DROP VIEW IF EXISTS Booking_Help;
 DROP VIEW IF EXISTS Accept_Reviews_Help;
+DROP VIEW IF EXISTS Admin_query;
 
+create view if not exists Admin_query as select u.Username, u.First_Name, u.Last_Name, r.ISBN, r.Rating, u.School_Name from Users as u inner join Reviews as r on u.Username=r.Username;
 
 CREATE VIEW IF NOT EXISTS Admin_Lendings_count AS
 SELECT Users.Username, COUNT(Lending.Serial_number) AS No_of_Lendings
