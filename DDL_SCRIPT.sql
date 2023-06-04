@@ -305,7 +305,7 @@ GROUP BY s.Subject_name , b.ISBN, b.Title, c.School_Name;
 
 
 CREATE VIEW if not exists Book_info_small AS
-SELECT B.Title, B.ISBN, C.School_Name,
+SELECT B.Title, B.ISBN, C.School_Name, C.No_of_copies,
 GROUP_CONCAT(S.subject_name SEPARATOR ', ') AS SubjectNames,
 GROUP_CONCAT(distinct A.Name SEPARATOR ', ') AS AuthorName
 FROM Books B
@@ -609,18 +609,3 @@ END//
 
 DELIMITER ;
 
-# DELIMITER //
-#
-# CREATE TRIGGER IF NOT EXISTS trg_copies_update_pending_booking
-# AFTER UPDATE ON Copies
-# FOR EACH ROW
-# BEGIN
-#  IF NEW.Available_copies > OLD.Available_copies THEN
-#    UPDATE Booking SET Status = 'Active', Making_date = CURRENT_DATE
-#    WHERE Copy_id = (SELECT Copy_id FROM Booking
-#      WHERE School_Name = OLD.School_Name AND Status = 'Pending'
-#      ORDER BY Making_date LIMIT 1);
-#  END IF;
-# END//
-#
-# DELIMITER ;
