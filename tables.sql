@@ -1,13 +1,27 @@
+DROP TABLE IF EXISTS Lending;
+DROP TABLE IF EXISTS Booking;
+DROP TABLE IF EXISTS Reviews;
+DROP TABLE IF EXISTS Book_Subject;
+DROP TABLE IF EXISTS Subject;
+DROP TABLE IF EXISTS Book_Author;
+DROP TABLE IF EXISTS Author;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Book_Publisher; 
+DROP TABLE IF EXISTS Publisher;
+DROP TABLE IF EXISTS Copies;
+DROP TABLE IF EXISTS Books;
+DROP TABLE IF EXISTS School;
+
 create table if not exists School (
 	Name Varchar(50) not null,
 	Address Varchar(30) not null,
 	Postal_code Varchar(10) not null,
-	City Varchar(30) not null, #Integer -> Varchar
+	City Varchar(30) not null,
 	Phone_number Varchar(15) not null,
 	Email Varchar(60) not null,
 	Headmaster_name Varchar(50) not null,
-	#to admin name svhsthke
-	primary key (Name)
+	primary key (Name),
+	UNIQUE(Phone_number)
 )
 engine = InnoDB;
 
@@ -23,15 +37,13 @@ create table if not exists Books (
 )
 engine = InnoDB;
 
-#sta books na valoume index gia to isbn
-
 create table if not exists Copies(
 	Copy_id Integer Unsigned AUTO_INCREMENT,
 	ISBN Varchar(30) not null,
 	No_of_copies Integer Unsigned not null,
-	Available_copies Integer Unsigned, #trigger on insert na ginei iso me to number of copies
+	Available_copies Integer Unsigned,
 	School_Name Varchar(50) not null,
-	primary key (Copy_id),  #gia eukolia sta updates
+	primary key (Copy_id),  
 	unique(ISBN, School_Name),
 	constraint fk_copies_isbn
 		foreign key (ISBN)
@@ -46,9 +58,8 @@ create table if not exists Copies(
 	constraint available_less_than_total
 		CHECK (Available_copies <= No_of_copies)
 )
-engine = InnoDB; #Na ftiaxtei ena stored procedure gia otan ginetai insert an yparxei hdh apla na auksanetai
+engine = InnoDB; 
 
-#ALTER TABLE Copies na mpainei apo default  to available  copies otan ginetai insert
 
 create table if not exists Publisher(
 	Publisher_id Integer Unsigned AUTO_INCREMENT,
@@ -60,6 +71,7 @@ engine = InnoDB;
 create table if not exists Book_Publisher(
 	Publisher_id Integer Unsigned not null,
 	ISBN Varchar(30) not null,
+	UNIQUE(ISBN), # katalavame arga oti den mporei 2 ekdotes na vgaloun vivlio me to idio isbn
 	primary key (ISBN, Publisher_id),
 	constraint fk_Publisher_id
 		foreign key (Publisher_id)
@@ -75,7 +87,7 @@ create table if not exists Book_Publisher(
 engine = InnoDB;
 
 
-create table if not exists Users (#mallon oi users den tha prepei na mporoun na diagrafoun alla mono na ginoun deactivated
+create table if not exists Users (
 	Username Varchar(30) not null,
 	Password Varchar(30) not null,
 	First_Name Varchar(30) not null,
@@ -107,7 +119,7 @@ engine = InnoDB;
 create table if not exists Book_Author(
 	Author_id Integer Unsigned not null, 
 	ISBN Varchar(30) not null,
-	primary key (ISBN,Author_id), # !!!!!!!!!!!!!!!!!!!!!!
+	primary key (ISBN,Author_id), 
 	constraint fk_Author_id
 		foreign key (Author_id)
 		references Author (Author_id)
@@ -122,14 +134,14 @@ create table if not exists Book_Author(
 engine = InnoDB;
 
 create table if not exists Subject(
-	Subject_id Integer Unsigned AUTO_INCREMENT, # pali ligo apsyxologhto
+	Subject_id Integer Unsigned AUTO_INCREMENT, 
 	Subject_name Varchar(30) not null,
 	primary key(Subject_id)
 )
 engine = InnoDB;
 
 create table if not exists Book_Subject(
-	Subject_id Integer Unsigned not null, # !!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Subject_id Integer Unsigned not null,
 	ISBN Varchar(30) not null,
 	primary key (ISBN,Subject_id),
 	constraint fk_Subject_id	
@@ -147,7 +159,7 @@ engine = InnoDB;
 
 create table if not exists Reviews (#dikia mas paradoxh: o kathe xrhsths mporei na kanei apo ena review se kathe vivlio
 	Review longtext not null,
-	Rating Integer Unsigned not null, ################################################ TO XAME KSEXASEI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Rating Integer Unsigned not null, 
 	Username Varchar(30) not null,
 	Post_Date timestamp default CURRENT_TIMESTAMP,
 	Last_Update timestamp default CURRENT_TIMESTAMP,
@@ -175,7 +187,7 @@ create table if not exists Lending (
 	Username Varchar(30) not null,
 	Return_status ENUM('Owed', 'Returned') default 'Owed',
 	Return_date date,
-	Copy_id Integer Unsigned not null,\
+	Copy_id Integer Unsigned not null,
 	Approved_by Varchar(30),
 	primary key(Serial_number),
 	constraint fk_Lending_User
@@ -186,7 +198,7 @@ create table if not exists Lending (
 	constraint fk_Lending_Copy_Id
 		foreign key (Copy_id)
 		references Copies(Copy_id)
-		on delete restrict # restrict omws mono ama xrwstaei alliws apla menei opws einai xwris na diagrafetai
+		on delete restrict 
 		on update cascade,
 	constraint fk_Lending_Approved_by
 		foreign key (Approved_by)
@@ -200,17 +212,17 @@ create table if not exists Booking (
 	Making_date date default CURRENT_DATE,
 	Username Varchar(30) not null,
 	Copy_id Integer Unsigned not null,
-	Status enum('Pending', 'Active') default 'Pending', #na mpei trigger on insert na elegxei thn diathesimothta -> akyro, tha petaksei error logw tou unsigned
+	Status enum('Pending', 'Active') default 'Active', 
 	primary key(Username, Copy_id),
 	constraint fk_Booking_User
 		foreign key (Username)
 		references Users (Username)
-		on delete cascade
+		on delete restrict 
 		on update cascade,
 	constraint fk_Booking_Copy_id
 		foreign key (Copy_id)
 		references Copies(Copy_id)
-		on delete cascade
+		on delete restrict
 		on update cascade
 )
 engine = InnoDB;
