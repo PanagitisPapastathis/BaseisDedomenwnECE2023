@@ -218,7 +218,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE TRIGGER IF NOT EXISTS trg_copies_update_pending_booking
+CREATE TRIGGER IF NOT EXISTS trg_copies_update
 BEFORE UPDATE ON Copies
 FOR EACH ROW
 BEGIN
