@@ -1,6 +1,3 @@
-
-
-
 DROP TRIGGER IF EXISTS trg_Lending_Insert;
 DROP TRIGGER IF EXISTS trg_Lending_With_Overdue_Lending;
 DROP TRIGGER IF EXISTS trg_Booking_With_Overdue_Lending;
@@ -12,7 +9,7 @@ DROP TRIGGER IF EXISTS trg_User_Deletions;
 DROP TRIGGER IF EXISTS trg_Last_Update_Reviews;
 DROP TRIGGER IF EXISTS trg_User_suspended_or_banned;
 DROP TRIGGER IF EXISTS trg_set_available_copies;
-
+DROP TRIGGER IF EXISTS trg_Lending_Approved_by;
 
 DELIMITER //
 
@@ -51,6 +48,15 @@ BEGIN
 END //
 DELIMITER ;
 
+
+DELIMITER // 
+CREATE TRIGGER IF NOT EXISTS trg_Lending_Approved_by
+BEFORE INSERT ON Lending
+FOR EACH ROW
+BEGIN
+	SET NEW.Approved_by = (SELECT Username From Users WHERE School_Name = (SELECT School_Name FROM Copies WHERE Copy_id = NEW.Copy_id LIMIT 1) LIMIT 1);
+END //
+DELIMITER ;
 
 
 DELIMITER // 
@@ -160,3 +166,4 @@ BEGIN
 END//
 
 DELIMITER ;
+
