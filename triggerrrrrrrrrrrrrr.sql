@@ -1,14 +1,3 @@
-DROP TRIGGER IF EXISTS trg_Users_Status_Updates;
-DROP TRIGGER IF EXISTS trg_User_Deletions;
-DROP TRIGGER IF EXISTS trg_Last_Update_Reviews;
-DROP TRIGGER IF EXISTS trg_User_suspended_or_banned;
-DROP TRIGGER IF EXISTS trg_set_available_copies;
-DROP TRIGGER IF EXISTS trg_limit_lendings;
-DROP TRIGGER IF EXISTS trg_limit_bookings;
-DROP TRIGGER IF EXISTS trg_increment_copies_lending;
-DROP TRIGGER IF EXISTS trg_increment_copies_booking;
-
-
 DELIMITER //
 
 CREATE TRIGGER IF NOT EXISTS trg_Users_Status_Updates
@@ -103,12 +92,18 @@ BEGIN
 
 DECLARE lnd INTEGER UNSIGNED;
 DECLARE bkng INTEGER UNSIGNED;
+DECLARE lim INTEGER UNSIGNED;
 
 SELECT COUNT(*) INTO lnd FROM Lending WHERE Username = NEW.Username AND Return_status = 'Owed';
 SELECT COUNT(*) INTO bkng FROM Booking WHERE Username = NEW.Username;
 
+IF (SELECT Status FROM Users WHERE Username = NEW.Username) = 'Student' THEN
+	SET lim = 2;
+ELSE
+	SET lim = 1;
+END IF;
 
-IF lnd + bkng >= 2 THEN
+IF lnd + bkng >= lim THEN
 	SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'Error creating the lending: Too many ledings/bookings in one week';
 ELSE
@@ -148,10 +143,14 @@ IF lnd + bkng >= 2 THEN
 	SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'Error creating the booking: Too many lendings/bookings in one week';
 ELSE
-	IF (SELECT Available_copies FROM Copies WHERE Copy_id = NEW.Copy_id) > 0 THEN
-      UPDATE Copies SET Available_copies = Available_copies -1
-      WHERE Copy_id=NEW.Copy_id;
-      DELETE FROM Booking WHERE Username = NEW.Username AND Copy_id = New.Copy_id;
+	IF NOT (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username AND Copy_id) = 0 THEN
+		IF (SELECT Available_copies FROM Copies WHERE Copy_id = NEW.Copy_id) > 0 THEN
+	      UPDATE Copies SET Available_copies = Available_copies -1
+	      WHERE Copy_id=NEW.Copy_id;
+	 	ELSE
+	 		SIGNAL SQLSTATE '45000'
+    		SET MESSAGE_TEXT = 'Error creating the booking: Too many lendings/bookings in one week';
+    	END IF;
     ELSE 
       SET NEW.Status = 'Pending';
     END IF;
@@ -194,6 +193,31 @@ END//
 
 DELIMITER ;	
 
+DELIMITER //
 
+CREATE TRIGGER IF NOT EXISTS trg_copies_update_pending_booking
+BEFORE UPDATE ON Copies
+FOR EACH ROW
+BEGIN
+  IF NOT NEW.No_of_copies = OLD.No_of_copies THEN
+    SET NEW.Available_copies = OLD.Available_copies + (NEW.No_of_copies - OLD.No_of_copies);
+  END IF;
+END//
 
+DELIMITER ;
 
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_copies_update_pending_booking
+AFTER UPDATE ON Copies
+FOR EACH ROW
+BEGIN
+  IF NEW.Available_copies > OLD.Available_copies THEN
+    UPDATE Booking SET Status = 'Active', Making_date = CURRENT_DATE
+    WHERE Copy_id = (SELECT Copy_id FROM Booking
+      WHERE School_Name = OLD.School_Name AND Status = 'Pending'
+      ORDER BY Making_date LIMIT 1);
+  END IF;
+END//
+
+DELIMITER ;
