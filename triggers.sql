@@ -16,7 +16,7 @@ DROP TRIGGER IF EXISTS trg_increment_copies_lending;
 
 DROP TRIGGER IF EXISTS trg_increment_copies_booking;
 
-DROP TRIGGER IF EXISTS trg_copies_update_pending_booking;
+DROP TRIGGER IF EXISTS trg_copies_update;
 
 DROP TRIGGER IF EXISTS trg_copies_update_pending_booking;
 
