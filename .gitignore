@@ -1,5 +1,0 @@
-.vscode
-env
-lib.session.sql
-.ipynb_checkpoints
-php/connection.php
