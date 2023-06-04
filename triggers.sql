@@ -1,115 +1,25 @@
-
-DROP TRIGGER IF EXISTS trg_Lending_Insert;
-DROP TRIGGER IF EXISTS trg_Lending_With_Overdue_Lending;
-DROP TRIGGER IF EXISTS trg_Booking_With_Overdue_Lending;
-DROP TRIGGER IF EXISTS trg_Lending_with_pending_booking;
-DROP TRIGGER IF EXISTS trg_Copies_Lendings;
-DROP TRIGGER IF EXISTS trg_Copies_Bookings;
 DROP TRIGGER IF EXISTS trg_Users_Status_Updates;
+
 DROP TRIGGER IF EXISTS trg_User_Deletions;
+
 DROP TRIGGER IF EXISTS trg_Last_Update_Reviews;
+
 DROP TRIGGER IF EXISTS trg_User_suspended_or_banned;
+
 DROP TRIGGER IF EXISTS trg_set_available_copies;
 
+DROP TRIGGER IF EXISTS trg_limit_lendings;
 
-DELIMITER //
+DROP TRIGGER IF EXISTS trg_limit_bookings;
 
-CREATE TRIGGER if not exists trg_Lending_Insert
-	BEFORE INSERT ON Lending
-	FOR EACH ROW
-BEGIN
-	DECLARE lending_count INT;
+DROP TRIGGER IF EXISTS trg_increment_copies_lending;
 
-	SET lending_count = (
-		SELECT COUNT(*)
-		FROM Lending
-		WHERE Username = NEW.Username
-		AND Making_date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY)
-	);
+DROP TRIGGER IF EXISTS trg_increment_copies_booking;
 
-	IF lending_count >= 2 THEN
-		SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'Maximum number of lendings reached for this user in one week for this user.';
-	END IF;
-	
-END //
+DROP TRIGGER IF EXISTS trg_copies_update_pending_booking;
 
-DELIMITER ;
+DROP TRIGGER IF EXISTS trg_copies_update_pending_booking;
 
-DELIMITER //
-
-CREATE TRIGGER IF NOT EXISTS trg_Lending_With_Overdue_Lending
-BEFORE INSERT ON Lending
-FOR EACH ROW
-BEGIN
-  IF (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username
-    AND Making_date <= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) AND Status='Owed') > 0 THEN
-    SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'Cannot add lending: user has an overdue lending.';
-  END IF;
-END //
-
-DELIMITER ;
-
-DELIMITER //
-
-CREATE TRIGGER IF NOT EXISTS trg_Booking_With_Overdue_Lending
-BEFORE INSERT ON Booking
-FOR EACH ROW
-BEGIN
-  IF (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username
-    AND Making_date <= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) AND Status='Act') > 0 THEN
-    SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'Cannot add booking: user has an overdue lending.';
-  END IF;
-END //
-
-DELIMITER ;
-
-
-DELIMITER // 
-CREATE TRIGGER IF NOT EXISTS trg_Lending_with_pending_booking
-BEFORE INSERT ON Lending
-FOR EACH ROW
-BEGIN
-	DELETE FROM Booking WHERE Username = NEW.Username AND Copy_id = New.Copy_id;
-END //
-DELIMITER ;
-
-
-
-DELIMITER // 
-CREATE TRIGGER IF NOT EXISTS trg_Copies_Lendings
-BEFORE INSERT ON Lending
-FOR EACH ROW
-BEGIN
-    IF (SELECT Available_copies FROM Copies WHERE Copy_id = NEW.Copy_id) > 0 THEN
-      UPDATE Copies SET Available_copies = Available_copies -1
-      WHERE Copy_id=NEW.Copy_id;
-    ELSE 
-      SIGNAL SQLSTATE '45000'
-		  SET MESSAGE_TEXT = 'No Available copies.';
-    END IF;
-END //
-
-DELIMITER // 
-CREATE TRIGGER IF NOT EXISTS trg_Copies_Bookings
-BEFORE INSERT ON Booking
-FOR EACH ROW
-BEGIN
-    DECLARE scl varchar(30);
-    DECLARE isbnnn varchar(30);
-    
-    IF (SELECT Available_copies FROM Copies WHERE Copy_id = NEW.Copy_id) > 0 THEN
-      UPDATE Copies SET Available_copies = Available_copies -1
-      WHERE School_Name=Scl AND ISBN=isbnnn;
-    ELSE 
-      SIGNAL SQLSTATE '45000'
-		  SET MESSAGE_TEXT = 'No Available copies.';
-    END IF;
-END //
-
-DELIMITER ;
 
 DELIMITER //
 
@@ -117,24 +27,16 @@ CREATE TRIGGER IF NOT EXISTS trg_Users_Status_Updates
 BEFORE UPDATE ON Users
 FOR EACH ROW
 BEGIN
-  IF OLD.Status = 'Administrator' THEN
-    IF (SELECT COUNT(*) FROM Users WHERE School_Name = OLD.School_Name AND Status = 'Administrator') = 1 THEN
-      SIGNAL SQLSTATE '45000'
-      SET MESSAGE_TEXT = 'Error on update: School has no other administrators';
-    END IF;
+  IF NEW.Status = 'Admin' AND OLD.Status = 'Teacher' THEN
+    UPDATE Users SET Status = 'Teacher' WHERE School_Name = NEW.School_Name;
   END IF;
   
-  IF OLD.Status = 'Central Administrator' THEN
-    IF (SELECT COUNT(*) FROM Users WHERE Status = 'Central Administrator') = 1 THEN
+  IF OLD.Status = 'Central Admin' AND NOT NEW.Status = 'Central Admin' THEN
       SIGNAL SQLSTATE '45000'
-      SET MESSAGE_TEXT = 'Error on update: No other central administrators';
-    END IF;
+      SET MESSAGE_TEXT = 'Error: Update central admin? You prolly goofed up.';
   END IF;
   
-  IF NOT OLD.Status = 'Student' AND NEW.Status = 'Student' THEN
-    SIGNAL SQLSTATE '45000'
-    SET MESSAGE_TEXT = 'Error on update: Cannot change status to student';
-  END IF;
+  
 END//
 
 DELIMITER ;
@@ -142,20 +44,20 @@ DELIMITER ;
 DELIMITER //
 
 CREATE TRIGGER IF NOT EXISTS trg_User_Deletions
-BEFORE DELETE ON Users
+BEFORE UPDATE  ON Users
 FOR EACH ROW
 BEGIN
-  IF OLD.Status = 'Administrator' THEN
-    IF (SELECT COUNT(*) FROM Users WHERE School_Name = OLD.School_Name AND Status = 'Administrator') = 1 THEN
+  IF OLD.Status = 'Admin' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE School_Name = OLD.School_Name AND Status = 'Admin') = 1 THEN
       SIGNAL SQLSTATE '45000'
       SET MESSAGE_TEXT = 'Error on delete: School has no other administrators';
     END IF;
   END IF;
   
-  IF OLD.Status = 'Central Administrator' THEN
-    IF (SELECT COUNT(*) FROM Users WHERE Status = 'Central Administrator') = 1 THEN
+  IF OLD.Status = 'Central Admin' THEN
+    IF (SELECT COUNT(*) FROM Users WHERE Status = 'Central Admin') = 1 THEN
       SIGNAL SQLSTATE '45000'
-      SET MESSAGE_TEXT = 'Error on delete: No other central administrators';
+      SET MESSAGE_TEXT = 'Error on delete: No other central admin';
     END IF;
   END IF;
 END//
@@ -199,6 +101,146 @@ BEFORE INSERT ON Copies
 FOR EACH ROW
 BEGIN
 	SET NEW.Available_copies = NEW.No_of_copies;
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_limit_lendings
+
+BEFORE INSERT ON Lending
+FOR EACH ROW
+BEGIN
+
+DECLARE lnd INTEGER UNSIGNED;
+DECLARE bkng INTEGER UNSIGNED;
+DECLARE lim INTEGER UNSIGNED;
+
+SELECT COUNT(*) INTO lnd FROM Lending WHERE Username = NEW.Username AND Return_status = 'Owed';
+SELECT COUNT(*) INTO bkng FROM Booking WHERE Username = NEW.Username;
+
+IF (SELECT Status FROM Users WHERE Username = NEW.Username) = 'Student' THEN
+	SET lim = 2;
+ELSE
+	SET lim = 1;
+END IF;
+
+IF lnd + bkng >= lim THEN
+	SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Error creating the lending: Too many ledings/bookings in one week';
+ELSE
+	IF (SELECT Available_copies FROM Copies WHERE Copy_id = NEW.Copy_id) > 0 THEN
+      UPDATE Copies SET Available_copies = Available_copies -1
+      WHERE Copy_id=NEW.Copy_id;
+      DELETE FROM Booking WHERE Username = NEW.Username AND Copy_id = New.Copy_id;
+      SET NEW.Approved_by = (SELECT Username From Users WHERE School_Name = (SELECT School_Name FROM Copies WHERE Copy_id = NEW.Copy_id LIMIT 1) LIMIT 1);
+    ELSE 
+      SIGNAL SQLSTATE '45000'
+	  SET MESSAGE_TEXT = 'No Available copies.';
+    END IF;
+END IF;
+
+
+END//
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_limit_bookings
+
+BEFORE INSERT ON Booking
+FOR EACH ROW
+BEGIN
+
+DECLARE lnd INTEGER UNSIGNED;
+DECLARE bkng INTEGER UNSIGNED;
+
+SELECT COUNT(*) INTO lnd FROM Lending WHERE Username = NEW.Username AND Return_status = 'Owed';
+SELECT COUNT(*) INTO bkng FROM Booking WHERE Username = NEW.Username;
+
+
+IF lnd + bkng >= 2 THEN
+	SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Error creating the booking: Too many lendings/bookings in one week';
+ELSE
+	IF NOT (SELECT COUNT(*) FROM Lending WHERE Username = NEW.Username AND Copy_id) = 0 THEN
+		IF (SELECT Available_copies FROM Copies WHERE Copy_id = NEW.Copy_id) > 0 THEN
+	      UPDATE Copies SET Available_copies = Available_copies -1
+	      WHERE Copy_id=NEW.Copy_id;
+	 	ELSE
+	 		SIGNAL SQLSTATE '45000'
+    		SET MESSAGE_TEXT = 'Error creating the booking: Too many lendings/bookings in one week';
+    	END IF;
+    ELSE 
+      SET NEW.Status = 'Pending';
+    END IF;
+END IF;
+
+
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_increment_copies_lending
+
+AFTER UPDATE ON Lending
+FOR EACH ROW
+BEGIN
+
+IF NOT OLD.Return_status = NEW.Return_Status AND OLD.Return_status = 'Owed' THEN 
+	UPDATE Copies SET Available_copies = Available_copies+1 WHERE Copy_id=NEW.Copy_id;
+END IF;
+	
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_increment_copies_booking
+
+AFTER DELETE ON Booking
+FOR EACH ROW
+BEGIN
+
+IF OLD.Status = 'Active' THEN 
+	UPDATE Copies SET Available_copies = Available_copies+1 WHERE Copy_id=OLD.Copy_id;
+END IF;
+	
+END//
+
+DELIMITER ;	
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_copies_update_pending_booking
+BEFORE UPDATE ON Copies
+FOR EACH ROW
+BEGIN
+  IF NOT NEW.No_of_copies = OLD.No_of_copies THEN
+    SET NEW.Available_copies = OLD.Available_copies + (NEW.No_of_copies - OLD.No_of_copies);
+  END IF;
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS trg_copies_update_pending_booking
+AFTER UPDATE ON Copies
+FOR EACH ROW
+BEGIN
+  IF NEW.Available_copies > OLD.Available_copies THEN
+    UPDATE Booking SET Status = 'Active', Making_date = CURRENT_DATE
+    WHERE Copy_id = (SELECT Copy_id FROM Booking
+      WHERE School_Name = OLD.School_Name AND Status = 'Pending'
+      ORDER BY Making_date LIMIT 1);
+  END IF;
 END//
 
 DELIMITER ;
